@@ -16,7 +16,16 @@ Tech stack used:
 
 Setup & run instructions:
 ---
-Step 1: git clone 
+- Step 1: git clone https://github.com/ZeeP-Coder/BorrowingHub
+- Step 2: Open BorrowingHub folder in VSCODE
+- Step 3: (IF NOT YET IMPLEMENTED) Add a ".env" file inside the BorrowingHub folder and type DB_PASSWORD=borrowinghub123 inside .env
+- Step 4: Open terminal then type the following in order:
+  - py -m venv venv
+  - venv\scripts\activate
+  - pip install -r requirements.txt
+  - py manage.py runserver
+- Step 5: Click the link shown or go to http://127.0.0.1:8000/
+  
 ---
 Team members (Name, Role, CIT-U Email):
 ---
