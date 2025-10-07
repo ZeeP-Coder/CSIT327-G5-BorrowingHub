@@ -34,7 +34,7 @@ Team members (Name, Role, CIT-U Email):
 |------|------|-------------|
 | **Rhyz Nhicco C. Libetario** | Full Stack Developer / Project Lead | rhyznhicco.libetario@cit.edu |
 | *Keith Daniel P. Lim* | Backend Developer | keithdaniel.lim@cit.edu |
-| *Van Kerhby M. Lubanga* | Frontend Developer | vankerhby.lubanga@cit.edu |
+| *Van Kehrby M. Lubanga* | Frontend Developer | vankehrby.lubanga@cit.edu |
 ---
 
 
