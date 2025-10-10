@@ -19,7 +19,14 @@ Setup & run instructions:
 - Step 1: git clone https://github.com/ZeeP-Coder/BorrowingHub
 - Step 2: Open BorrowingHub folder in VSCODE
 - Step 3: Add a ".env" file inside the same folder where manage.py is located (which should be in the BorrowingHub folder)
-    and type DB_PASSWORD=borrowinghub123 inside .env (Remember to save the file)
+    and type this inside it:
+  - DB_NAME=postgres
+  - DB_USER=postgres.mbdcqebgoabagabgsjwc
+  - DB_PASSWORD=borrowinghub123
+  - DB_HOST=aws-1-ap-southeast-1.pooler.supabase.com
+  - DB_PORT=6543
+  - DB_POOL_MODE=transaction
+  - (Remember to save the file)
 - Step 4: Open terminal then type the following in order:
   - py -m venv venv
   - venv\scripts\activate
