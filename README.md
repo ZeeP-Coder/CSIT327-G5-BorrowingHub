@@ -18,7 +18,8 @@ Setup & run instructions:
 ---
 - Step 1: git clone https://github.com/ZeeP-Coder/BorrowingHub
 - Step 2: Open BorrowingHub folder in VSCODE
-- Step 3: (IF NOT YET IMPLEMENTED) Add a ".env" file inside the BorrowingHub folder and type DB_PASSWORD=borrowinghub123 inside .env
+- Step 3: Add a ".env" file inside the same folder where manage.py is located (which should be in the BorrowingHub folder)
+    and type DB_PASSWORD=borrowinghub123 inside .env (Remember to save the file)
 - Step 4: Open terminal then type the following in order:
   - py -m venv venv
   - venv\scripts\activate
@@ -32,8 +33,8 @@ Team members (Name, Role, CIT-U Email):
 | Name | Role | CIT-U Email |
 |------|------|-------------|
 | **Rhyz Nhicco C. Libetario** | Full Stack Developer / Project Lead | rhyznhicco.libetario@cit.edu |
-| *Keith Daniel P. Lim* | Backend Developer | teammate1@cit.edu |
-| *Van Kerhby M. Lubanga* | Frontend Developer | teammate2@cit.edu |
+| *Keith Daniel P. Lim* | Backend Developer | keithdaniel.lim@cit.edu |
+| *Van Kehrby M. Lubanga* | Frontend Developer | vankehrby.lubanga@cit.edu |
 ---
 
 
