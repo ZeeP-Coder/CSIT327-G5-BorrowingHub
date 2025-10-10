@@ -36,3 +36,193 @@ body.landing-body { margin: 0; background: #fafbfc; color: #0f172a; }
   .landing-hero { margin-top: 40px; }
   .landing-hero-title { font-size: 1.3rem; }
 }
+
+body.landing-body {
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    background-color: #fff5f5;
+    color: #1f1f1f;
+}
+
+a {
+    text-decoration: none;
+    transition: all 0.25s ease;
+}
+
+/* Header */
+.landing-header {
+    background-color: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    padding: 1rem 5%;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.landing-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: auto;
+}
+
+.landing-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.landing-logo {
+    background-color: #e63946;
+    color: white;
+    padding: 0.6rem 1rem;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+.landing-title-group {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+}
+
+.landing-title {
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.landing-subtitle {
+    font-size: 0.8rem;
+    color: #6b7280;
+}
+
+/* Navbar buttons */
+.landing-login-btn {
+    color: #e63946;
+    font-weight: 600;
+    margin-left: 1rem;
+}
+
+.landing-register-btn {
+    background-color: #e63946;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-weight: 600;
+    margin-left: 1rem;
+}
+
+.landing-register-btn:hover {
+    background-color: #c92a37;
+}
+
+/* Hero Section */
+.landing-hero {
+    text-align: center;
+    padding: 6rem 2rem;
+    background: linear-gradient(to bottom right, #ffe8e8, #ffffff);
+}
+
+.landing-hero-title {
+    font-size: 2.6rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    color: #1a1a1a;
+    line-height: 1.2;
+}
+
+.landing-hero-desc {
+    font-size: 1rem;
+    color: #4b5563;
+    max-width: 600px;
+    margin: 0 auto 2.5rem;
+    line-height: 1.6;
+}
+
+.landing-hero-ctas {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.landing-hero-btn {
+    background-color: #e63946;
+    color: white;
+    padding: 0.9rem 1.8rem;
+    border-radius: 10px;
+    font-weight: 600;
+    box-shadow: 0 4px 10px rgba(230, 57, 70, 0.3);
+}
+
+.landing-hero-btn:hover {
+    background-color: #c92a37;
+    transform: translateY(-2px);
+}
+
+.landing-hero-link {
+    color: #e63946;
+    font-weight: 500;
+    padding: 0.9rem 1.8rem;
+}
+
+.landing-hero-link:hover {
+    text-decoration: underline;
+}
+
+/* Features Section */
+.landing-features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 2rem;
+    padding: 4rem 2rem 5rem;
+    max-width: 1000px;
+    margin: auto;
+}
+
+.feature-card {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    text-align: center;
+    transition: all 0.25s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+}
+
+.feature-card h3 {
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+    color: #e63946;
+}
+
+.feature-card p {
+    color: #4b5563;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+/* Footer */
+.landing-footer {
+    text-align: center;
+    padding: 2rem;
+    color: #6b7280;
+    font-size: 0.9rem;
+    background-color: #fff5f5;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .landing-hero-title {
+        font-size: 2rem;
+    }
+    .landing-hero-desc {
+        font-size: 0.95rem;
+    }
+}

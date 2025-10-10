@@ -26,15 +26,37 @@
             </div>
         </nav>
     </header>
+
     <main>
         <section class="landing-hero">
             <h1 class="landing-hero-title">Borrow smarter. Track everything.</h1>
-            <p class="landing-hero-desc">Keep tabs on books, tools, and gadgets you lend and borrow — all in one clean dashboard.</p>
+            <p class="landing-hero-desc">
+                Keep tabs on books, tools, and gadgets you lend and borrow — all in one clean dashboard.
+            </p>
             <div class="landing-hero-ctas">
                 <a href="{% url 'registration_app:register' %}" class="landing-hero-btn">Get Started Free</a>
                 <a href="{% url 'login_app:login' %}" class="landing-hero-link">I already have an account</a>
             </div>
         </section>
+
+        <section class="landing-features">
+            <div class="feature-card">
+                <h3>📘 Easy Tracking</h3>
+                <p>Track your borrowed and lent items in a clear, organized way.</p>
+            </div>
+            <div class="feature-card">
+                <h3>🚀 Fast Management</h3>
+                <p>Add, edit, and monitor items quickly with one click.</p>
+            </div>
+            <div class="feature-card">
+                <h3>📊 Clean Dashboard</h3>
+                <p>View everything at a glance with a simple, user-friendly dashboard.</p>
+            </div>
+        </section>
     </main>
+
+    <footer class="landing-footer">
+        <p>© 2025 BorrowingHub. All rights reserved.</p>
+    </footer>
 </body>
 </html>
