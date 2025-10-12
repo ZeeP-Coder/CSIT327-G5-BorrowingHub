@@ -28,6 +28,7 @@ Setup & run instructions:
   - DB_POOL_MODE=transaction
   - (Remember to save the file)
 - Step 4: Open terminal then type the following in order:
+  - cd BorrowinghHub (if you put the the clone inside the folder)
   - py -m venv venv
   - venv\scripts\activate
   - pip install -r requirements.txt
