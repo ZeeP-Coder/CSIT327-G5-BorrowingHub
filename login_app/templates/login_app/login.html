@@ -1,58 +1,99 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - BorrowingHub</title>
-    {% load static %}
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'login_app/login.css' %}">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Borrowing Hub - Login</title>
+  {% load static %}
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+    }
+
+body { background: linear-gradient(135deg, #fff5f5, #fef2f2, #fafafa); color: #0f172a; min-height: 100vh; display: flex; flex-direction: column; }
+header { width: 100%; background: #fff; padding: 0.8rem 2rem; box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05); display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 10; }
+.logo { display: flex; align-items: center; gap: 0.5rem; }
+.logo-icon { background-color: #ef4444; color: white; border-radius: 10px; padding: 0.4rem 0.6rem; font-weight: 700; font-size: 1rem; }
+.logo-text { font-size: 1.1rem; font-weight: 700; color: #0f172a; }
+.header-buttons { display: flex; gap: 0.5rem; }
+.header-buttons a { text-decoration: none; padding: 0.4rem 0.9rem; border-radius: 8px; font-weight: 600; font-size: 0.9rem; color: #ef4444; background: #fee2e2; transition: all 0.2s ease; }
+.header-buttons a:hover { background: #ef4444; color: #fff; transform: translateY(-1px); }
+main { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 2rem 1rem; gap: 1.5rem; }
+.back-btn { display: inline-flex; align-items: center; gap: 0.4rem; text-decoration: none; color: #fff; background: #ef4444; border: 1.5px solid #fee2e2; padding: 0.6rem 1.2rem; border-radius: 10px; font-weight: 600; font-size: 0.95rem; transition: all 0.25s ease; box-shadow: 0 2px 6px rgba(239, 68, 68, 0.08); }
+.back-btn:hover { background: #ef4444; color: #fff; border-color: #ef4444; box-shadow: 0 4px 10px rgba(239, 68, 68, 0.25); transform: translateY(-1px); }
+.login-card { background: #fff; border-radius: 16px; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08); padding: 2.5rem; width: 100%; max-width: 420px; text-align: center; transition: all 0.3s ease; }
+.login-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1); }
+.login-card .logo { justify-content: center; margin-bottom: 1rem; }
+.login-subtitle { font-size: 1rem; color: #475569; margin-bottom: 1.5rem; }
+label { display: block; text-align: left; font-weight: 500; margin-bottom: 0.3rem; font-size: 0.9rem; }
+input { width: 100%; padding: 0.75rem; margin-bottom: 1rem; border-radius: 8px; border: 1px solid #e2e8f0; font-size: 0.95rem; transition: all 0.2s ease; }
+input:focus { outline: none; border-color: #ef4444; box-shadow: 0 0 0 3px #fee2e2; }
+.login-btn { background: #ef4444; color: #fff; padding: 0.75rem; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; width: 100%; transition: all 0.2s ease; box-shadow: 0 3px 8px rgba(239, 68, 68, 0.25); }
+.login-btn:hover { background: #dc2626; transform: translateY(-1px); box-shadow: 0 5px 12px rgba(239, 68, 68, 0.35); }
+.login-footer { margin-top: 1rem; font-size: 0.9rem; color: #64748b; }
+.login-footer a { color: #ef4444; font-weight: 600; text-decoration: none; margin-left: 4px; }
+.login-footer a:hover { text-decoration: underline; }
+@media (max-width: 560px) { .login-card { padding: 1.8rem; } .back-btn { font-size: 0.88rem; } }
+
+  </style>
 </head>
-<body class="login-body">
-    <header class="login-header-bar">
-        <div class="login-header-content">
-            <span class="login-header-logo">BH</span>
-            <span class="login-header-title">Borrowing Hub</span>
-            <nav class="login-header-nav">
-                <a href="{% url 'login_app:login' %}" class="login-header-link login-header-link-active">Login</a>
-                <a href="{% url 'registration_app:register' %}" class="login-header-link">Register</a>
-            </nav>
-        </div>
-    </header>
-    <a href="{% url 'landing_app:landing' %}" class="login-back-link">← Go back to landing page</a>
-    <div class="login-main-container">
-        <div class="login-card">
-            <div class="login-header">
-                <span class="login-logo">BH</span>
-                <span class="login-title">Borrowing Hub</span>
-            </div>
-            <div class="login-subtitle">Sign in to your account</div>
-            {% if messages %}
-                <div class="login-messages">
-                    {% for message in messages %}
-                        <div class="login-alert login-alert-{{ message.tags }}">{{ message }}</div>
-                    {% endfor %}
-                </div>
-            {% endif %}
-            <form method="post" class="login-form">
-                {% csrf_token %}
-                <div class="login-form-group">
-                    <label for="username" class="login-label">Username</label>
-                    <input type="text" name="username" id="username" class="login-input" placeholder="Enter your username" required>
-                </div>
-                <div class="login-form-group">
-                    <label for="password" class="login-label">Password</label>
-                    <input type="password" name="password" id="password" class="login-input" placeholder="Enter your password" required>
-                </div>
-                <button type="submit" class="login-btn">Sign In</button>
-            </form>
-            <div class="login-footer">
-                <span>Don't have an account?</span> <a href="{% url 'registration_app:register' %}" class="login-link">Sign up here</a>
-            </div>
-        </div>
+<body>
+  <header>
+    <div class="logo">
+      <div class="logo-icon">BH</div>
+      <span class="logo-text">Borrowing Hub</span>
     </div>
-    <script src="{% static 'login_app/login.js' %}"></script>
+    <div class="header-buttons">
+      <a href="{% url 'login_app:login' %}" class="login-header-link login-header-link-active">Login</a>
+      <a href="{% url 'registration_app:register' %}" class="login-header-link">Register</a>
+    </div>
+  </header>
+
+  <main>
+    <a href="{% url 'landing_app:landing' %}" class="back-btn">
+      ← Go back to landing page
+    </a>
+
+    <div class="login-card">
+      <div class="logo">
+        <div class="logo-icon">BH</div>
+        <span class="logo-text">Borrowing Hub</span>
+      </div>
+
+      <div class="login-subtitle">Sign in to your account</div>
+
+      {% if messages %}
+        <div class="login-messages">
+          {% for message in messages %}
+            <div class="login-alert login-alert-{{ message.tags }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      <form method="post" class="login-form">
+        {% csrf_token %}
+        <div class="login-form-group">
+          <label for="username" class="login-label">Username</label>
+          <input type="text" name="username" id="username" class="login-input" placeholder="Enter your username" required>
+        </div>
+        <div class="login-form-group">
+          <label for="password" class="login-label">Password</label>
+          <input type="password" name="password" id="password" class="login-input" placeholder="Enter your password" required>
+        </div>
+        <button type="submit" class="login-btn">Sign In</button>
+      </form>
+
+      <div class="login-footer">
+        <span>Don't have an account?</span>
+        <a href="{% url 'registration_app:register' %}" class="login-link">Sign up here</a>
+      </div>
+    </div>
+  </main>
+
+  <script src="{% static 'login_app/login.js' %}"></script>
 </body>
 </html>

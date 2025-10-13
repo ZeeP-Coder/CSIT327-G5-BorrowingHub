@@ -1,123 +1,137 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up - BorrowingHub</title>
-    {% load static %}
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'registration_app/registration.css' %}">
-</head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up - BorrowingHub</title>
+  {% load static %}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'registration_app/registration.css' %}?v=2">
+</head> 
 <body class="register-body">
-    <header class="register-header-bar">
-        <div class="register-header-content">
-            <span class="register-header-logo">BH</span>
-            <span class="register-header-title">Borrowing Hub</span>
-            <nav class="register-header-nav">
-                <a href="{% url 'login_app:login' %}" class="register-header-link">Login</a>
-                <a href="{% url 'registration_app:register' %}" class="register-header-link register-header-link-active">Register</a>
-            </nav>
-        </div>
-    </header>
-    <a href="{% url 'landing_app:landing' %}" class="register-back-link">← Go back to landing page</a>
-    <div class="register-main-container">
-        <div class="register-card">
-            <div class="register-header">
-                <span class="register-logo">BH</span>
-                <span class="register-title">Borrowing Hub</span>
-            </div>
-            <div class="register-subtitle">Create your account</div>
-            {% if messages %}
-                <div class="register-messages">
-                    {% for message in messages %}
-                        <div class="register-alert register-alert-{{ message.tags }}">{{ message }}</div>
-                    {% endfor %}
-                </div>
-            {% endif %}
-            {% if form.non_field_errors %}
-                <div class="register-messages">
-                    {% for error in form.non_field_errors %}
-                        <div class="register-alert register-alert-error">{{ error }}</div>
-                    {% endfor %}
-                </div>
-            {% endif %}
-            <form method="post" class="register-form">
-                {% csrf_token %}
-                <div class="register-form-group">
-                    <label for="{{ form.email.id_for_label }}" class="register-label">Email</label>
-                    {{ form.email }}
-                    {% if form.email.help_text %}
-                        <div class="register-help-text">{{ form.email.help_text }}</div>
-                    {% endif %}
-                    {% if form.email.errors %}
-                        <div class="register-form-errors">
-                            <ul>
-                                {% for error in form.email.errors %}
-                                    <li>{{ error }}</li>
-                                {% endfor %}
-                            </ul>
-                        </div>
-                    {% endif %}
-                </div>
-                <div class="register-form-group">
-                    <label for="{{ form.username.id_for_label }}" class="register-label">Username</label>
-                    {{ form.username }}
-                    {% if form.username.help_text %}
-                        <div class="register-help-text">{{ form.username.help_text }}</div>
-                    {% endif %}
-                    {% if form.username.errors %}
-                        <div class="register-form-errors">
-                            <ul>
-                                {% for error in form.username.errors %}
-                                    <li>{{ error }}</li>
-                                {% endfor %}
-                            </ul>
-                        </div>
-                    {% endif %}
-                </div>
-                <div class="register-form-group">
-                    <label for="{{ form.password1.id_for_label }}" class="register-label">Password</label>
-                    {{ form.password1 }}
-                    {% if form.password1.help_text %}
-                        <div class="register-help-text">{{ form.password1.help_text }}</div>
-                    {% endif %}
-                    {% if form.password1.errors %}
-                        <div class="register-form-errors">
-                            <ul>
-                                {% for error in form.password1.errors %}
-                                    <li>{{ error }}</li>
-                                {% endfor %}
-                            </ul>
-                        </div>
-                    {% endif %}
-                </div>
-                <div class="register-form-group">
-                    <label for="{{ form.password2.id_for_label }}" class="register-label">Confirm Password</label>
-                    {{ form.password2 }}
-                    {% if form.password2.help_text %}
-                        <div class="register-help-text">{{ form.password2.help_text }}</div>
-                    {% endif %}
-                    {% if form.password2.errors %}
-                        <div class="register-form-errors">
-                            <ul>
-                                {% for error in form.password2.errors %}
-                                    <li>{{ error }}</li>
-                                {% endfor %}
-                            </ul>
-                        </div>
-                    {% endif %}
-                </div>
-                <button type="submit" class="register-btn">Create Account</button>
-            </form>
-            <div class="register-footer">
-                <span>Already have an account?</span> <a href="{% url 'login_app:login' %}" class="register-link">Sign in here</a>
-            </div>
-        </div>
+    
+  <!-- Header -->
+  <header class="register-header-bar">
+    <div class="register-header-content">
+      <div style="display:flex; align-items:center; gap:10px;">
+        <span class="register-header-logo">BH</span>
+        <span class="register-header-title">Borrowing Hub</span>
+      </div>
+      <nav class="register-header-nav">
+        <a href="{% url 'login_app:login' %}" class="register-header-link">Login</a>
+        <a href="{% url 'registration_app:register' %}" class="register-header-link register-header-link-active">Register</a>
+      </nav>
     </div>
+  </header>
+
+        <a href="{% url 'landing_app:landing' %}" class="register-back-btn">← Go back to landing page</a>
+
+  <!-- Main container -->
+  <main class="register-main-container">
+    <div class="register-card">
 
 
-    <script src="{% static 'registration_app/registration.js' %}"></script>
+      <!-- Logo and title -->
+      <div class="register-header">
+        <span class="register-logo">BH</span>
+        <span class="register-title">Borrowing Hub</span>
+      </div>
+
+      <div class="register-subtitle">Create your account</div>
+
+      <!-- Messages -->
+      {% if messages %}
+      <div class="register-messages">
+        {% for message in messages %}
+        <div class="register-alert register-alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      {% if form.non_field_errors %}
+      <div class="register-messages">
+        {% for error in form.non_field_errors %}
+        <div class="register-alert register-alert-error">{{ error }}</div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      <!-- Registration form -->
+      <form method="post" class="register-form">
+        {% csrf_token %}
+
+        <!-- Email -->
+        <div class="register-form-group">
+          <label for="{{ form.email.id_for_label }}" class="register-label">Email</label>
+          {{ form.email }}
+          {% if form.email.errors %}
+          <div class="register-form-errors">
+            <ul>
+              {% for error in form.email.errors %}
+              <li>{{ error }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+          {% endif %}
+        </div>
+
+        <!-- Username -->
+        <div class="register-form-group">
+          <label for="{{ form.username.id_for_label }}" class="register-label">Username</label>
+          {{ form.username }}
+          {% if form.username.errors %}
+          <div class="register-form-errors">
+            <ul>
+              {% for error in form.username.errors %}
+              <li>{{ error }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+          {% endif %}
+        </div>
+
+        <!-- Password -->
+        <div class="register-form-group">
+          <label for="{{ form.password1.id_for_label }}" class="register-label">Password</label>
+          {{ form.password1 }}
+          {% if form.password1.errors %}
+          <div class="register-form-errors">
+            <ul>
+              {% for error in form.password1.errors %}
+              <li>{{ error }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+          {% endif %}
+        </div>
+
+        <!-- Confirm password -->
+        <div class="register-form-group">
+          <label for="{{ form.password2.id_for_label }}" class="register-label">Confirm Password</label>
+          {{ form.password2 }}
+          {% if form.password2.errors %}
+          <div class="register-form-errors">
+            <ul>
+              {% for error in form.password2.errors %}
+              <li>{{ error }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+          {% endif %}
+        </div>
+
+        <button type="submit" class="register-btn">Create Account</button>
+      </form>
+
+      <div class="register-footer">
+        <span>Already have an account?</span>
+        <a href="{% url 'login_app:login' %}" class="register-link">Sign in here</a>
+      </div>
+    </div>
+  </main>
+
+  <script src="{% static 'registration_app/registration.js' %}"></script>
 </body>
 </html>

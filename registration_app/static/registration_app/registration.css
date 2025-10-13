@@ -1,49 +1,81 @@
-/* Header bar */
-.register-header-bar { width: 100%; background: #fff; box-shadow: 0 2px 12px #0001; padding: 0; margin-bottom: 18px; }
-.register-header-content { max-width: 1120px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; padding: 18px 24px; }
-.register-header-logo { width: 38px; height: 38px; border-radius: 10px; background: #ef4444; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.1rem; margin-right: 10px; }
-.register-header-title { font-size: 1.1rem; font-weight: 700; margin-right: auto; margin-left: 8px; }
-.register-header-nav { display: flex; gap: 10px; }
-.register-header-link { color: #ef4444; text-decoration: none; font-weight: 700; padding: 8px 16px; border-radius: 8px; font-size: 1rem; transition: background 0.2s; }
-.register-header-link-active, .register-header-link:hover { background: #fee2e2; }
-.register-back-link { display: inline-block; margin: 0 auto 18px 24px; color: #ef4444; text-decoration: none; font-weight: 600; font-size: 1rem; transition: color 0.2s; }
-.register-back-link:hover { text-decoration: underline; color: #b91c1c; }
-/* Back link */
-.register-back-link { display: inline-block; margin-bottom: 18px; color: #ef4444; text-decoration: none; font-weight: 600; font-size: 1rem; transition: color 0.2s; }
-.register-back-link:hover { text-decoration: underline; color: #b91c1c; }
-/* Reset and base styles */
-.register-body { margin: 0; font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"; background: #fafbfc; color: #0f172a; min-height: 100vh; }
-.register-main-container { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 0 8px; }
-.register-card { background: #fff; border-radius: 14px; box-shadow: 0 4px 32px #0001; padding: 38px 32px 28px 32px; max-width: 420px; width: 100%; display: flex; flex-direction: column; align-items: center; }
-.register-header { display: flex; align-items: center; gap: 14px; margin-bottom: 8px; }
-.register-logo { width: 38px; height: 38px; border-radius: 10px; background: #ef4444; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.1rem; }
-.register-title { font-size: 1.1rem; font-weight: 700; }
-.register-subtitle { color: #64748b; font-size: 1.05rem; margin-bottom: 18px; }
-.register-messages { width: 100%; margin-bottom: 10px; }
-.register-alert { padding: 10px 15px; border-radius: 6px; margin-bottom: 8px; font-size: 0.98rem; }
-.register-alert-success { background: #d1fae5; color: #065f46; border: 1px solid #10b981; }
-.register-alert-error { background: #fee2e2; color: #991b1b; border: 1px solid #ef4444; }
-.register-form { width: 100%; display: flex; flex-direction: column; gap: 16px; }
-.register-form-group { display: flex; flex-direction: column; gap: 6px; }
-.register-label { font-weight: 600; color: #0f172a; font-size: 1rem; margin-bottom: 2px; }
-.register-form-group input { padding: 12px 14px; border: 1.5px solid #e5e7eb; border-radius: 8px; font-size: 1rem; font-family: inherit; transition: border-color 0.2s; }
-.register-form-group input:focus { outline: none; border-color: #ef4444; }
-.register-btn { background: #ef4444; color: #fff; border: none; padding: 12px 0; border-radius: 8px; font-weight: 700; font-size: 1.08rem; margin-top: 6px; cursor: pointer; transition: background 0.2s; box-shadow: 0 2px 8px #ef444420; }
-.register-btn:hover { background: #dc2626; }
-.register-footer { margin-top: 18px; color: #64748b; font-size: 0.98rem; text-align: center; }
-.register-link { color: #ef4444; text-decoration: none; font-weight: 600; margin-left: 4px; }
-.register-link:hover { text-decoration: underline; color: #b91c1c; }
-.register-help-text { font-size: 0.92rem; color: #64748b; margin-top: 2px; }
-.register-form-errors { color: #991b1b; font-size: 0.95rem; margin-top: 2px; }
-.register-form-errors ul { list-style: none; padding: 0; margin: 0; }
-.register-form-errors li { margin-bottom: 0.18rem; }
+/* Header bar */ 
+.register-header-bar { width: 100%; background: #fff; box-shadow: 0 2px 12px #0001; padding: 0; margin-bottom: 0; position: sticky; top: 0; z-index: 10; } 
+.register-header-content { max-width: 1120px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; padding: 18px 24px; } 
+.register-header-logo { width: 38px; height: 38px; border-radius: 10px; background: #ef4444; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.1rem; margin-right: 10px; } 
+.register-header-title { font-size: 1.1rem; font-weight: 700; margin-right: auto; margin-left: 8px; } 
+.register-header-nav { display: flex; gap: 10px; } 
+.register-header-link { color: #ef4444; text-decoration: none; font-weight: 700; padding: 8px 16px; border-radius: 8px; font-size: 1rem; transition: background 0.2s; } 
+.register-header-link-active, .register-header-link:hover { background: #fee2e2; } 
 
-.register-error-input {
-    border-color: #e63946;
-    background-color: #ffe5e5;
+/* Back link */ 
+.register-back-link { display: inline-flex; align-items: center; gap: 6px; margin: 20px 0 0 24px; color: #ef4444; text-decoration: none; font-weight: 600; font-size: 1rem; border: 1.5px solid #fee2e2; background: #fff; padding: 0.6rem 1.2rem; border-radius: 10px; box-shadow: 0 2px 6px rgba(239,68,68,0.08); transition: all 0.25s ease; } 
+.register-back-link:hover { background: #ef4444; color: #fff; border-color: #ef4444; box-shadow: 0 4px 10px rgba(239,68,68,0.25); transform: translateY(-1px); } 
+.back-btn { display: inline-flex; align-items: center; gap: 0.4rem; text-decoration: none; color: #ef4444; background: #fff; border: 1.5px solid #fee2e2; padding: 0.6rem 1.2rem; border-radius: 10px; font-weight: 600; font-size: 0.95rem; transition: all 0.25s ease; box-shadow: 0 2px 6px rgba(239, 68, 68, 0.08); }
+
+
+/* Reset and base styles */ 
+.register-body { margin: 0; font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"; background: linear-gradient(135deg, #fff5f5, #fef2f2, #fafafa); color: #0f172a; min-height: 100vh; display: flex; flex-direction: column; } 
+.register-main-container { flex: 1; display: flex; align-items: center; justify-content: center; padding: 2rem 1rem; } 
+
+/* Card */ 
+.register-card { background: #fff; border-radius: 16px; box-shadow: 0 6px 20px rgba(0,0,0,0.08); padding: 38px 32px 28px 32px; max-width: 420px; width: 100%; display: flex; flex-direction: column; align-items: center; text-align: center; transition: all 0.3s ease; } 
+.register-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.1); } 
+
+/* Header inside card */ 
+.register-header { display: flex; align-items: center; justify-content: center; gap: 14px; margin-bottom: 8px; } 
+.register-logo { width: 38px; height: 38px; border-radius: 10px; background: #ef4444; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.1rem; } 
+.register-title { font-size: 1.1rem; font-weight: 700; } 
+.register-subtitle { color: #64748b; font-size: 1.05rem; margin-bottom: 18px; } 
+
+/* Alerts */ 
+.register-messages { width: 100%; margin-bottom: 10px; } 
+.register-alert { padding: 10px 15px; border-radius: 6px; margin-bottom: 8px; font-size: 0.98rem; } 
+.register-alert-success { background: #d1fae5; color: #065f46; border: 1px solid #10b981; } 
+.register-alert-error { background: #fee2e2; color: #991b1b; border: 1px solid #ef4444; } 
+
+/* Form */ 
+.register-form { width: 100%; display: flex; flex-direction: column; gap: 16px; } 
+.register-form-group { display: flex; flex-direction: column; gap: 6px; text-align: left; } 
+.register-label { font-weight: 600; color: #0f172a; font-size: 1rem; margin-bottom: 2px; } 
+.register-form-group input { padding: 12px 14px; border: 1.5px solid #e5e7eb; border-radius: 8px; font-size: 1rem; font-family: inherit; transition: border-color 0.2s; } 
+.register-form-group input:focus { outline: none; border-color: #ef4444; box-shadow: 0 0 0 3px #fee2e2; } 
+.register-error-input { border-color: #e63946; background-color: #ffe5e5; } 
+
+/* Button */ 
+.register-btn { background: #ef4444; color: #fff; border: none; padding: 12px 0; border-radius: 8px; font-weight: 700; font-size: 1.08rem; margin-top: 6px; cursor: pointer; transition: all 0.2s; box-shadow: 0 3px 8px rgba(239,68,68,0.25); } 
+.register-btn:hover { background: #dc2626; transform: translateY(-1px); box-shadow: 0 5px 12px rgba(239,68,68,0.35); } 
+
+/* Footer */ 
+.register-footer { margin-top: 18px; color: #64748b; font-size: 0.98rem; text-align: center; } 
+.register-link { color: #ef4444; text-decoration: none; font-weight: 600; margin-left: 4px; } 
+.register-link:hover { text-decoration: underline; color: #b91c1c; } 
+.register-help-text { font-size: 0.92rem; color: #64748b; margin-top: 2px; } 
+.register-form-errors { color: #991b1b; font-size: 0.95rem; margin-top: 2px; } 
+.register-form-errors ul { list-style: none; padding: 0; margin: 0; } 
+.register-form-errors li { margin-bottom: 0.18rem; } 
+
+@media (max-width: 560px) { .register-card { padding: 22px 14px 18px 14px; } .register-back-link { font-size: 0.9rem; padding: 0.5rem 1rem; } }
+
+/* Centered modern back button */
+.register-back-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  background: #ef4444;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  border-radius: 10px;
+  font-size: 1rem;
+  margin: 30px auto 0 auto;
+  box-shadow: 0 3px 10px rgba(239, 68, 68, 0.25);
+  transition: all 0.25s ease;
 }
 
-
-@media (max-width: 560px) {
-  .register-card { padding: 22px 6px 18px 6px; }
+.register-back-btn:hover {
+  background: #dc2626;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(239, 68, 68, 0.35);
 }
