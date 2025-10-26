@@ -6,95 +6,130 @@
     <title>Dashboard - BorrowingHub</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'dashboard_app/dashboard.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body class="dashboard-body">
-    <header class="dashboard-header" style="background:#fff;border-bottom:1px solid #f3f4f6;">
-        <div class="dashboard-header-content" style="max-width:1400px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 32px;min-height:80px;">
-            <div class="dashboard-header-left" style="display:flex;align-items:center;gap:16px;">
-                <span style="width:44px;height:44px;border-radius:12px;background:#ef4444;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.3rem;">BH</span>
-                <div style="display:flex;flex-direction:column;align-items:flex-start;">
-                    <span style="font-size:1.2rem;font-weight:700;color:#0f172a;">Borrowing Hub</span>
-                    <span style="color:#64748b;font-size:0.95rem;margin-top:2px;">Track your borrowed items</span>
+
+    <!-- Header -->
+    <header class="dashboard-header">
+        <div class="dashboard-header-content">
+            <div class="dashboard-header-left">
+                <span class="dashboard-logo">BH</span>
+                <div class="dashboard-title-group">
+                    <span class="dashboard-title">Borrowing Hub</span>
+                    <span class="dashboard-subtitle">Track your borrowed items</span>
                 </div>
             </div>
-            <div class="dashboard-header-right" style="display:flex;align-items:center;gap:16px;">
-                <form method="get" style="display:flex;align-items:center;gap:8px;">
-                    <input type="text" name="search" placeholder="Search items..." style="padding:10px 16px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:1rem;min-width:220px;background:#fff;outline:none;">
-                </form>
-                <a href="#" class="dashboard-add-btn" style="background:#ef4444;color:#fff;font-weight:700;padding:10px 22px;border-radius:8px;font-size:1rem;text-decoration:none;box-shadow:0 2px 8px #ef444420;transition:background 0.2s;">+ Add Item</a>
-                <a href="{% url 'dashboard_app:profile' %}" class="dashboard-header-link" style="color:#ef4444;font-weight:700;padding:10px 18px;border-radius:8px;font-size:1rem;text-decoration:none;transition:background 0.2s;margin-left:8px;">Profile</a>
-                <a href="#" onclick="confirmLogout(event)" class="dashboard-header-link" style="color:#ef4444;font-weight:700;padding:10px 18px;border-radius:8px;font-size:1rem;text-decoration:none;transition:background 0.2s;">Logout</a>
+            <div class="dashboard-header-right">
+            
+                <a href="{% url 'additem_app:add_item' %}" class="dashboard-btn red">+ Add Item</a>
+                <a href="{% url 'dashboard_app:profile' %}" class="dashboard-btn outline">Profile</a>
+                <a href="#" onclick="confirmLogout(event)" class="dashboard-btn outline">Logout</a>
             </div>
         </div>
     </header>
 
+    <!-- Dashboard Container -->
     <div class="dashboard-container">
+
         {% if messages %}
-            <div class="dashboard-messages">
-                {% for message in messages %}
-                    <div class="dashboard-alert dashboard-alert-{{ message.tags }}">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            </div>
+        <div class="dashboard-messages">
+            {% for message in messages %}
+                <div class="dashboard-alert dashboard-alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        </div>
         {% endif %}
 
-        <div class="dashboard-main" style="max-width:1400px;margin:0 auto;padding:32px 32px 0 32px;">
-            <div class="dashboard-stats-row" style="display:flex;gap:18px;align-items:stretch;">
-                <div class="dashboard-stat-card" style="flex:1;background:#fff;border-radius:12px;box-shadow:0 4px 16px #0001;display:flex;align-items:center;gap:16px;padding:18px 24px;">
-                    <span style="background:#fee2e2;color:#ef4444;border-radius:8px;width:38px;height:38px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;"><i class="fa fa-box"></i></span>
-                    <div>
-                        <div style="font-size:1.1rem;font-weight:700;color:#0f172a;">{{ total_items }}</div>
-                        <div style="color:#64748b;font-size:0.98rem;">Total Items</div>
-                    </div>
-                </div>
-                <div class="dashboard-stat-card" style="flex:1;background:#fff;border-radius:12px;box-shadow:0 4px 16px #0001;display:flex;align-items:center;gap:16px;padding:18px 24px;">
-                    <span style="background:#dcfce7;color:#22c55e;border-radius:8px;width:38px;height:38px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;"><i class="fa fa-check"></i></span>
-                    <div>
-                        <div style="font-size:1.1rem;font-weight:700;color:#0f172a;">{{ available_items }}</div>
-                        <div style="color:#64748b;font-size:0.98rem;">Available</div>
-                    </div>
-                </div>
-                <div class="dashboard-stat-card" style="flex:1;background:#fff;border-radius:12px;box-shadow:0 4px 16px #0001;display:flex;align-items:center;gap:16px;padding:18px 24px;">
-                    <span style="background:#fef9c3;color:#eab308;border-radius:8px;width:38px;height:38px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;"><i class="fa fa-user-friends"></i></span>
-                    <div>
-                        <div style="font-size:1.1rem;font-weight:700;color:#0f172a;">{{ borrowed_items }}</div>
-                        <div style="color:#64748b;font-size:0.98rem;">Borrowed</div>
-                    </div>
-                </div>
-                <div class="dashboard-stat-card" style="flex:1;background:#fff;border-radius:12px;box-shadow:0 4px 16px #0001;display:flex;align-items:center;gap:16px;padding:18px 24px;">
-                    <span style="background:#fee2e2;color:#ef4444;border-radius:8px;width:38px;height:38px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;"><i class="fa fa-exclamation-triangle"></i></span>
-                    <div>
-                        <div style="font-size:1.1rem;font-weight:700;color:#0f172a;">{{ overdue_items }}</div>
-                        <div style="color:#64748b;font-size:0.98rem;">Overdue</div>
-                    </div>
+        <!-- Stats Section -->
+        <div class="dashboard-stats-row">
+            <div class="dashboard-stat-card red">
+                <i class="fa fa-box"></i>
+                <div>
+                    <div class="stat-number">{{ total_items }}</div>
+                    <div class="stat-label">Total Items</div>
                 </div>
             </div>
-            <div class="dashboard-filter-row" style="margin:18px 0 0 0;display:flex;gap:12px;align-items:center;">
-                <span style="color:#ef4444;font-weight:600;">Filter by:</span>
-                <select style="padding:8px 14px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:1rem;background:#fff;">
-                    <option>All Categories</option>
-                </select>
-                <select style="padding:8px 14px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:1rem;background:#fff;">
-                    <option>All Status</option>
-                </select>
-            </div>
-            <div class="dashboard-empty-state" style="margin:48px 0 0 0;display:flex;flex-direction:column;align-items:center;justify-content:center;">
-                <div style="background:#fdf2f8;border-radius:50%;width:64px;height:64px;display:flex;align-items:center;justify-content:center;margin-bottom:18px;">
-                    <i class="fa fa-box" style="color:#ef4444;font-size:2rem;"></i>
+            <div class="dashboard-stat-card green">
+                <i class="fa fa-check"></i>
+                <div>
+                    <div class="stat-number">{{ available_items }}</div>
+                    <div class="stat-label">Available</div>
                 </div>
-                <div style="font-size:1.2rem;font-weight:700;color:#0f172a;margin-bottom:6px;">No items yet</div>
-                <div style="color:#64748b;font-size:1rem;margin-bottom:18px;">Start by adding your first item to track.</div>
-                <a href="#" class="dashboard-action-btn">Add Your First Item</a>
+            </div>
+            <div class="dashboard-stat-card yellow">
+                <i class="fa fa-user-friends"></i>
+                <div>
+                    <div class="stat-number">{{ borrowed_items }}</div>
+                    <div class="stat-label">Borrowed</div>
+                </div>
+            </div>
+            <div class="dashboard-stat-card red">
+                <i class="fa fa-exclamation-triangle"></i>
+                <div>
+                    <div class="stat-number">{{ overdue_items }}</div>
+                    <div class="stat-label">Overdue</div>
+                </div>
             </div>
         </div>
+
+        <!-- Filter Form -->
+        <form method="get" class="dashboard-filter-row">
+            <input type="text" name="search" placeholder="Search items..." value="{{ search_query }}">
+            <select name="category" onchange="this.form.submit()">
+                <option {% if category_filter == 'All Categories' or not category_filter %}selected{% endif %}>All Categories</option>
+                <option {% if category_filter == 'Books' %}selected{% endif %}>Books</option>
+                <option {% if category_filter == 'Electronics' %}selected{% endif %}>Electronics</option>
+                <option {% if category_filter == 'Tools' %}selected{% endif %}>Tools</option>
+                <option {% if category_filter == 'Sports' %}selected{% endif %}>Sports</option>
+            </select>
+
+            <select name="status" onchange="this.form.submit()">
+                <option {% if status_filter == 'All Status' or not status_filter %}selected{% endif %}>All Status</option>
+                <option {% if status_filter == 'Available' %}selected{% endif %}>Available</option>
+                <option {% if status_filter == 'Borrowed' %}selected{% endif %}>Borrowed</option>
+            </select>
+
+            <button type="submit" class="dashboard-btn red small">Apply</button>
+        </form>
+
+        <!-- Items List -->
+        {% if items %}
+        <div class="item-list">
+            {% for item in items %}
+            <div class="item-card">
+                {% if item.image %}
+                    <img src="{{ item.image.url }}" alt="{{ item.name }}">
+                {% else %}
+                    <div class="item-placeholder">No Image</div>
+                {% endif %}
+                <h4>{{ item.name }}</h4>
+                <p class="item-desc">{{ item.description|truncatechars:100 }}</p>
+                <p><strong>Category:</strong> {{ item.category }}</p>
+                <p><strong>Status:</strong>
+                    {% if item.is_available %}
+                        <span class="available">Available</span>
+                    {% else %}
+                        <span class="borrowed">Borrowed</span>
+                    {% endif %}
+                </p>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="dashboard-empty-state">
+            <div class="empty-icon"><i class="fa fa-box"></i></div>
+            <h3>No items yet</h3>
+            <p>Start by adding your first item to track.</p>
+            <a href="{% url 'additem_app:add_item' %}" class="dashboard-action-btn">Add Your First Item</a>
+        </div>
+        {% endif %}
     </div>
 
-    <!-- Logout Confirmation Modal -->
+    <!-- Logout Modal -->
     <div id="logoutModal" class="modal">
         <div class="modal-content">
             <h3>Confirm Logout</h3>
-            <p>Are you sure you want to logout? You will need to sign in again to access your account.</p>
+            <p>Are you sure you want to logout?</p>
             <div class="modal-actions">
                 <button class="modal-btn cancel" onclick="closeLogoutModal()">Cancel</button>
                 <button class="modal-btn confirm" onclick="confirmLogoutAction()">Yes, Logout</button>
@@ -107,21 +142,15 @@
             event.preventDefault();
             document.getElementById('logoutModal').style.display = 'flex';
         }
-
         function closeLogoutModal() {
             document.getElementById('logoutModal').style.display = 'none';
         }
-
         function confirmLogoutAction() {
             window.location.href = "{% url 'login_app:logout' %}";
         }
-
-        // Close modal when clicking outside
         window.onclick = function(event) {
             const modal = document.getElementById('logoutModal');
-            if (event.target == modal) {
-                closeLogoutModal();
-            }
+            if (event.target == modal) closeLogoutModal();
         }
     </script>
 </body>

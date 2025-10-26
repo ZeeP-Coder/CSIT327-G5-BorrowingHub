@@ -1,0 +1,210 @@
+/* Global font and reset */
+* {
+  font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  box-sizing: border-box;
+}
+
+/* Reset and base */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* Card Container */
+.additem-container {
+    background: #ffffff;
+    padding: 32px 40px;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    width: 100%;
+    max-width: 600px;
+}
+
+/* Heading */
+.additem-container h2 {
+    color: #0f172a;
+    font-weight: 700;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Django Form styling */
+form p {
+    margin-bottom: 16px;
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 6px;
+}
+
+input[type="text"],
+input[type="number"],
+textarea,
+select {
+    padding: 10px 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    font-size: 15px;
+    color: #0f172a;
+    transition: border-color 0.2s;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+textarea:focus,
+select:focus {
+    border-color: #ef4444;
+    outline: none;
+}
+
+input[type="file"] {
+    font-size: 14px;
+}
+
+/* Checkbox */
+input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+}
+
+/* Submit Button */
+.btn-submit {
+    background-color: #ef4444;
+    color: #fff;
+    font-weight: 600;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.btn-submit:hover {
+    background-color: #dc2626;
+    transform: scale(1.02);
+}
+
+/* Back link */
+.back-link {
+    display: block;
+    text-align: center;
+    margin-top: 16px;
+    color: #ef4444;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.back-link:hover {
+    color: #dc2626;
+    text-decoration: underline;
+}
+
+.additem-container {
+    background: #ffffff;
+    padding: 32px 40px;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    width: 100%;
+    max-width: 600px;
+    margin-top: 40px; /* add some space under the header */
+}
+
+.additem-wrapper {
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: calc(100vh - 100px);
+    background-color: #f9fafb;
+    padding-top: 40px;
+}
+
+.additem-card {
+    background: #fff;
+    padding: 40px 48px;
+    border-radius: 16px;
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.08);
+    width: 100%;
+    max-width: 520px;
+}
+
+.additem-card h2 {
+    text-align: center;
+    font-size: 1.6rem;
+    color: #111827;
+    font-weight: 700;
+    margin-bottom: 24px;
+}
+
+.additem-card label {
+    display: block;
+    font-weight: 600;
+    margin-top: 16px;
+    margin-bottom: 6px;
+    color: #374151;
+}
+
+.additem-card input[type="text"],
+.additem-card input[type="number"],
+.additem-card textarea,
+.additem-card input[type="file"] {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.additem-card input:focus,
+.additem-card textarea:focus {
+    border-color: #ef4444;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 16px;
+}
+
+.save-btn {
+    background-color: #ef4444;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 12px;
+    width: 100%;
+    margin-top: 24px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.save-btn:hover {
+    background-color: #dc2626;
+}
+
+.back-link {
+    display: block;
+    text-align: center;
+    margin-top: 16px;
+    color: #ef4444;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}
