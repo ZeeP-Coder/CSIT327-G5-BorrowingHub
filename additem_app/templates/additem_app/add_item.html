@@ -43,8 +43,15 @@
             <label for="description">Description:</label>
             <textarea id="description" name="description" placeholder="Describe the item"></textarea>
 
-            <label for="category">Category:</label>
-            <input type="text" id="category" name="category" placeholder="Category">
+            <label>Category:</label>
+                <div class="category-checklist" style="margin-bottom: 1em;">
+                    {% for value, label in form.category.field.choices %}
+                    <label style="display:block; margin-bottom:4px;">
+                        <input type="checkbox" name="category" value="{{ value }}">
+                        {{ label }}
+                    </label>
+                {% endfor %}
+            </div>
 
             <label for="image">Image:</label>
             <input type="file" id="image" name="image" accept="image/*">

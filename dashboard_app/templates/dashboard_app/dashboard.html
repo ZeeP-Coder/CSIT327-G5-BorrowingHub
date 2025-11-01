@@ -21,7 +21,6 @@
                 </div>
             </div>
             <div class="dashboard-header-right">
-            
                 <a href="{% url 'additem_app:add_item' %}" class="dashboard-btn red">+ Add Item</a>
                 <a href="{% url 'dashboard_app:profile' %}" class="dashboard-btn outline">Profile</a>
                 <a href="#" onclick="confirmLogout(event)" class="dashboard-btn outline">Logout</a>
@@ -81,6 +80,14 @@
                 <option {% if category_filter == 'Electronics' %}selected{% endif %}>Electronics</option>
                 <option {% if category_filter == 'Tools' %}selected{% endif %}>Tools</option>
                 <option {% if category_filter == 'Sports' %}selected{% endif %}>Sports</option>
+                <option {% if category_filter == 'School Supplies' %}selected{% endif %}>School Supplies</option>
+                <option {% if category_filter == 'Board Games' %}selected{% endif %}>Board Games</option>
+                <option {% if category_filter == 'Sports Equipment' %}selected{% endif %}>Sports Equipment</option>
+                <option {% if category_filter == 'Toys & Games' %}selected{% endif %}>Toys & Games</option>
+                <option {% if category_filter == 'Furniture' %}selected{% endif %}>Furniture</option>
+                <option {% if category_filter == 'Kitchen Appliances' %}selected{% endif %}>Kitchen Appliances</option>
+                <option {% if category_filter == 'Cleaning Equipment' %}selected{% endif %}>Cleaning Equipment</option>
+                <option {% if category_filter == 'Miscellaneous / Others' %}selected{% endif %}>Miscellaneous / Others</option>
             </select>
 
             <select name="status" onchange="this.form.submit()">
@@ -112,6 +119,17 @@
                         <span class="borrowed">Borrowed</span>
                     {% endif %}
                 </p>
+
+                <div class="item-actions">
+                    <button type="button" class="dashboard-btn outline small"
+                            onclick="openEditModal('{{ item.id }}', '{{ item.name }}', '{{ item.description }}', '{{ item.category }}', '{{ item.quantity }}', '{{ item.is_available }}')">
+                        Edit
+                    </button>
+                    <button type="button" class="dashboard-btn red small"
+                            onclick="openDeleteModal('{{ item.id }}', '{{ item.name }}')">
+                        Delete
+                    </button>
+                </div>
             </div>
             {% endfor %}
         </div>
@@ -137,6 +155,76 @@
         </div>
     </div>
 
+    <!-- Edit Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <h3>Edit Item</h3>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="edit">
+                <input type="hidden" id="edit_item_id" name="item_id">
+
+                <label>Name:</label>
+                <input type="text" id="edit_name" name="name" required>
+
+                <label>Description:</label>
+                <textarea id="edit_description" name="description"></textarea>
+
+                <label>Category:</label>
+                <div class="category-checkboxes">
+                    <label>Category:</label>
+                    <div class="category-checkboxes">
+                        <label class="checkbox-option"><input type="checkbox" name="category" value="Books"> Books</label>
+                        <label class="checkbox-option"><input type="checkbox" name="category" value="Electronics"> Electronics</label>
+                        <label class="checkbox-option"><input type="checkbox" name="category" value="Tools"> Tools</label>
+                        <label class="checkbox-option"><input type="checkbox" name="category" value="Sports"> Sports</label>
+                        <label class="checkbox-option"><input type="checkbox" name="category" value="School Supplies"> School Supplies</label>
+                        <label class="checkbox-option"><input type="checkbox" name="category" value="Board Games"> Board Games</label>
+                        <label class="checkbox-option"><input type="checkbox" name="category" value="Sports Equipment"> Sports Equipment</label>
+                        <label class="checkbox-option"><input type="checkbox" name="category" value="Toys & Games"> Toys & Games</label>
+                        <label class="checkbox-option"><input type="checkbox" name="category" value="Furniture"> Furniture</label>
+                        <label class="checkbox-option"><input type="checkbox" name="category" value="Kitchen Appliances"> Kitchen Appliances</label>
+                        <label class="checkbox-option"><input type="checkbox" name="category" value="Cleaning Equipment"> Cleaning Equipment</label>
+                        <label class="checkbox-option"><input type="checkbox" name="category" value="Miscellaneous / Others"> Miscellaneous / Others</label>
+                    </div>
+                </div>
+
+                <label>Quantity:</label>
+                <input type="number" id="edit_quantity" name="quantity" min="1">
+
+                <label>
+                    <input type="checkbox" id="edit_available" name="is_available">
+                    Available
+                </label>
+
+                <label>Image (optional):</label>
+                <input type="file" name="image" accept="image/*">
+
+                <div class="modal-actions">
+                    <button type="button" class="modal-btn cancel" onclick="closeModal('editModal')">Cancel</button>
+                    <button type="submit" class="modal-btn confirm">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Modal -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <h3>Delete Item</h3>
+            <p>Are you sure you want to delete <strong id="delete_item_name"></strong>?</p>
+            <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="delete">
+                <input type="hidden" id="delete_item_id" name="item_id">
+                <div class="modal-actions">
+                    <button type="button" class="modal-btn cancel" onclick="closeModal('deleteModal')">Cancel</button>
+                    <button type="submit" class="modal-btn confirm">Yes, Delete</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
         function confirmLogout(event) {
             event.preventDefault();
@@ -148,9 +236,41 @@
         function confirmLogoutAction() {
             window.location.href = "{% url 'login_app:logout' %}";
         }
+
+        function openEditModal(id, name, desc, category, qty, available) {
+            document.getElementById('editModal').style.display = 'flex';
+            document.getElementById('edit_item_id').value = id;
+            document.getElementById('edit_name').value = name;
+            document.getElementById('edit_description').value = desc;
+            document.getElementById('edit_quantity').value = qty;
+            document.getElementById('edit_available').checked = (available === 'True');
+
+            // ✅ Reset all checkboxes first
+            document.querySelectorAll('#editModal input[name="category"]').forEach(cb => cb.checked = false);
+
+            // ✅ Re-check based on current item categories
+            const categories = category.split(',').map(c => c.trim());
+            document.querySelectorAll('#editModal input[name="category"]').forEach(cb => {
+                if (categories.includes(cb.value)) {
+                    cb.checked = true;
+                }
+            });
+        }
+
+        function openDeleteModal(id, name) {
+            document.getElementById('deleteModal').style.display = 'flex';
+            document.getElementById('delete_item_id').value = id;
+            document.getElementById('delete_item_name').textContent = name;
+        }
+        function closeModal(id) {
+            document.getElementById(id).style.display = 'none';
+        }
         window.onclick = function(event) {
-            const modal = document.getElementById('logoutModal');
-            if (event.target == modal) closeLogoutModal();
+            const modals = ['editModal', 'deleteModal', 'logoutModal'];
+            modals.forEach(m => {
+                const modal = document.getElementById(m);
+                if (event.target == modal) closeModal(m);
+            });
         }
     </script>
 </body>

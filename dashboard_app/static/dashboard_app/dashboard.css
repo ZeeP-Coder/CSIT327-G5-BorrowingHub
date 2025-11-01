@@ -14,6 +14,14 @@ body.dashboard-body {
   background: #fff;
   border-bottom: 1px solid #f3f4f6;
 }
+
+.dashboard-title-group {
+  color: black;
+  display: flex;
+  flex-direction: column;
+  align-items:flex-start;
+}
+
 .dashboard-header-content {
   max-width: 1400px;
   margin: 0 auto;
@@ -36,33 +44,25 @@ body.dashboard-body {
   font-size: 1.3rem;
 }
 .dashboard-header-left {
+  color: black;
   display: flex;
   align-items: center;
   gap: 16px;
 }
 .dashboard-title {
+  color: black;
   font-size: 1.2rem;
   font-weight: 700;
 }
 .dashboard-subtitle {
   color: #64748b;
   font-size: 0.95rem;
+  margin-top:2px;
 }
 .dashboard-header-right {
   display: flex;
   align-items: center;
   gap: 16px;
-}
-
-/* SEARCH */
-.dashboard-search input {
-  padding: 10px 16px;
-  border: 1.5px solid #e5e7eb;
-  border-radius: 8px;
-  font-size: 1rem;
-  min-width: 220px;
-  background: #fff;
-  outline: none;
 }
 
 /* BUTTONS */
@@ -73,6 +73,7 @@ body.dashboard-body {
   padding: 10px 22px;
   font-size: 1rem;
   transition: 0.2s;
+  cursor: pointer;
 }
 .dashboard-btn.red {
   background: #ef4444;
@@ -83,12 +84,14 @@ body.dashboard-body {
 .dashboard-btn.outline {
   color: #ef4444;
   border: 1px solid #ef4444;
+  background: transparent;
 }
 .dashboard-btn.outline:hover {
   background: #fee2e2;
 }
 .dashboard-btn.small {
   padding: 8px 18px;
+  font-size: 0.9rem;
 }
 
 /* DASHBOARD CONTENT */
@@ -157,6 +160,9 @@ body.dashboard-body {
   border-radius: 12px;
   box-shadow: 0 2px 8px #0001;
   padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 .item-card img {
   width: 100%;
@@ -183,6 +189,14 @@ body.dashboard-body {
 .available { color: #22c55e; }
 .borrowed { color: #ef4444; }
 
+/* ITEM ACTION BUTTONS (Edit/Delete) */
+.item-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 10px;
+}
+
 /* EMPTY STATE */
 .dashboard-empty-state {
   text-align: center;
@@ -201,7 +215,7 @@ body.dashboard-body {
   font-size: 2rem;
 }
 
-/* MODAL */
+/* MODAL (Edit/Delete) */
 .modal {
   display: none;
   position: fixed;
@@ -218,6 +232,37 @@ body.dashboard-body {
   border-radius: 12px;
   max-width: 500px;
   width: 90%;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  animation: fadeIn 0.2s ease-in-out;
+}
+.modal-content h3 {
+  margin-top: 0;
+  color: #ef4444;
+  font-weight: 700;
+}
+.modal-content label {
+  display: block;
+  font-weight: 600;
+  margin-top: 12px;
+  color: #374151;
+}
+.modal-content input[type="text"],
+.modal-content input[type="number"],
+.modal-content textarea,
+.modal-content input[type="file"] {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 1rem;
+  margin-top: 6px;
+  outline: none;
+  background: #f9fafb;
+}
+.modal-content input:focus,
+.modal-content textarea:focus {
+  border-color: #ef4444;
+  background: #fff;
 }
 .modal-actions {
   display: flex;
@@ -231,13 +276,30 @@ body.dashboard-body {
   font-weight: 700;
   border: none;
   cursor: pointer;
+  font-size: 1rem;
 }
 .modal-btn.cancel {
   background: #e5e7eb;
+  color: #374151;
+  transition: 0.2s;
+}
+.modal-btn.cancel:hover {
+  background: #d1d5db;
 }
 .modal-btn.confirm {
   background: #ef4444;
   color: #fff;
+  box-shadow: 0 2px 8px #ef444420;
+  transition: 0.2s;
+}
+.modal-btn.confirm:hover {
+  background: #dc2626;
+}
+
+/* ANIMATION */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* RESPONSIVE */
@@ -250,4 +312,28 @@ body.dashboard-body {
   .dashboard-stats-row {
     flex-direction: column;
   }
+  .modal-content {
+    width: 95%;
+    padding: 24px;
+  }
+
+  /* CATEGORY CHECKBOXES IN EDIT MODAL */
+.category-checkboxes {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 6px 12px;
+  margin-top: 8px;
+}
+.checkbox-option {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.95rem;
+  color: #374151;
+}
+.checkbox-option input[type="checkbox"] {
+  accent-color: #ef4444;
+  transform: scale(1.1);
+}
+
 }

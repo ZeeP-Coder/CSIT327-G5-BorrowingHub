@@ -12,7 +12,9 @@ def add_item_view(request):
     if request.method == 'POST':
         form = ItemForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            item = form.save(commit=False)
+            item.category = ', '.join(form.cleaned_data['category'])
+            item.save()
             messages.success(request, 'Item added successfully!')
             return redirect('dashboard_app:dashboard')
     else:

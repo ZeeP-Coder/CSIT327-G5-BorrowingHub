@@ -1,33 +1,31 @@
 from django import forms
-from dashboard_app.models import Item 
+from dashboard_app.models import Item
+
+CATEGORY_CHOICES = [
+    ('Books', 'Books'),
+    ('Electronics', 'Electronics'),
+    ('Tools', 'Tools'),
+    ('Sports', 'Sports'),
+    ('School Supplies', 'School Supplies'),
+    ('Board Games', 'Board Games'),
+    ('Sports Equipment', 'Sports Equipment'),
+    ('Toys & Games', 'Toys & Games'),
+    ('Furniture', 'Furniture'),
+    ('Kitchen Appliances', 'Kitchen Appliances'),
+    ('Cleaning Equipment', 'Cleaning Equipment'),
+    ('Miscellaneous / Others', 'Miscellaneous / Others'),
+]
 
 class ItemForm(forms.ModelForm):
+    category = forms.MultipleChoiceField(
+        choices=CATEGORY_CHOICES,
+        widget=forms.CheckboxSelectMultiple,
+        required=True
+    )
+
     class Meta:
         model = Item
         fields = ['name', 'description', 'category', 'image', 'quantity', 'is_available']
-        widgets = {
-            'name': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Enter item name'
-            }),
-            'description': forms.Textarea(attrs={
-                'class': 'form-control',
-                'rows': 3,
-                'placeholder': 'Describe the item'
-            }),
-            'category': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Category'
-            }),
-            'quantity': forms.NumberInput(attrs={
-                'class': 'form-control',
-                'min': 1
-            }),
-            'is_available': forms.CheckboxInput(attrs={
-                'class': 'form-check-input'
-            }),
-        }
-
 
     def clean_name(self):
         name = self.cleaned_data.get('name')

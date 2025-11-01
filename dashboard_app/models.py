@@ -4,7 +4,7 @@ from django.db import models
 class Item(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True)
-    category = models.CharField(max_length=50, blank=True)
+    category = models.CharField(max_length=300, blank=True)
     image = models.ImageField(upload_to='items/', blank=True, null=True)
     quantity = models.PositiveIntegerField(default=1)
     is_available = models.BooleanField(default=True)
