@@ -32,17 +32,19 @@ body.dashboard-body {
   min-height: 80px;
 }
 .dashboard-logo {
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
-  background: #ef4444;
-  color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 800;
-  font-size: 1.3rem;
+  width: 44px;
+  height: 44px;
+  background-color: #e63946;
+  color: white;
+  font-weight: 700;
+  font-size: 1.2rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
+
 .dashboard-header-left {
   color: black;
   display: flex;

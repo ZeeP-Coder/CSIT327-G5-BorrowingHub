@@ -1,7 +1,9 @@
+
+
 /* Reset and base styles */
 .landing-reset { box-sizing: border-box; }
 body.landing-body, .landing-body * { font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji" !important; }
-body.landing-body { margin: 0; background: #fafbfc; color: #0f172a; }
+body.landing-body { margin: 0; background: #ffe8e8; color: #0f172a; }
 
 /* Header / Navbar */
 .landing-header { background: none; padding: 0; } /* removed 40px padding */
@@ -37,18 +39,18 @@ body.landing-body { margin: 0; background: #fafbfc; color: #0f172a; }
   .landing-hero-title { font-size: 1.3rem; }
 }
 
-body.landing-body { font-family: 'Inter', sans-serif; margin: 0; background-color: #fff5f5; color: #1f1f1f;}
+body.landing-body { font-family: 'Inter', sans-serif; margin: 0; background-color: #ffe8e8; color: #1f1f1f;}
 a { text-decoration: none; transition: all 0.25s ease;}
 
 /* Header */
 .landing-header { background-color: white; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); padding: 0; /* adjusted from 1rem 5% to 0 for cleaner alignment */ position: sticky;
 top: 0; z-index: 10;}
 .landing-nav { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: auto; padding: 1rem 5%;}
-.landing-brand {display: flex; align-items: center; gap: 0.8rem;}
-.landing-logo { background-color: #e63946; color: white; padding: 0.6rem 1rem; border-radius: 8px; font-weight: 700; font-size: 1.2rem;}
+.landing-brand {display: flex; align-items: center; gap: 12px;}
+.landing-logo {display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; background-color: #e63946; /* red color */ color: white; font-weight: 700; font-size: 1.2rem; border-radius: 12px; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);}
 .landing-title-group { display: flex; flex-direction: column; line-height: 1.2;}
 .landing-title { font-weight: 700; font-size: 1.1rem;}
-.landing-subtitle { font-size: 0.8rem; color: #6b7280;}
+.landing-subtitle { font-size: 0.9rem; color: #6b7280;}
 
 /* Navbar buttons */
 .landing-login-btn { color: #e63946; font-weight: 600; margin-left: 1rem;}
@@ -60,7 +62,7 @@ top: 0; z-index: 10;}
     text-align: center;
     padding: 4rem 2rem; /* reduced top spacing */
     margin-top: 0; /* ensures no big gap between header and hero */
-    background: linear-gradient(to bottom right, #ffe8e8, #ffffff);
+    background: linear-gradient(to bottom right, #ffe8e8, #ffe8e8);
 }
 
 .landing-hero-title {font-size: 2.6rem; font-weight: 800; margin-bottom: 1rem; color: #1a1a1a;line-height: 1.2;}
