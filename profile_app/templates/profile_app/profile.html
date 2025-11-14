@@ -43,24 +43,7 @@
                     <b><span class="profile-label">Email: </span></b>
                     <span class="profile-value">{{ user.email }}</span>
                 </div>
-                <div class="profile-info-item">
-                    <b><span class="profile-label">First Name: </span></b>
-                    <span class="profile-value">{{ user.first_name|default:"Not set" }}</span>
-                </div>
-                <div class="profile-info-item">
-                    <b><span class="profile-label">Last Name: </span></b>
-                    <span class="profile-value">{{ user.last_name|default:"Not set" }}</span>
-                </div>
-                <div class="profile-info-item">
-                    <b><span class="profile-label">Member Since: </span></b>
-                    <span class="profile-value">{{ user.date_joined|date:"F d, Y" }}</span>
-                </div>
-                <div class="profile-info-item">
-                    <b><span class="profile-label">Last Login: </span></b>
-                    <span class="profile-value">{{ user.last_login|date:"F d, Y - g:i A" }}</span>
-                </div>
             </div>
-            <a href="#" class="dashboard-action-btn">Edit Profile</a>
         </div>
 
         <!-- Password Management Section -->
@@ -68,13 +51,6 @@
             <h2 class="profile-section-title">Password & Security</h2>
             <p class="profile-section-desc">Update your password to keep your account secure.</p>
             <a href="#" class="dashboard-action-btn secondary">Change Password</a>
-        </div>
-
-        <!-- Account Actions Section -->
-        <div class="profile-section danger-section">
-            <h2 class="profile-section-title">Danger Zone</h2>
-            <p class="profile-section-desc">Permanently delete your account and all associated data. This action cannot be undone.</p>
-            <button class="dashboard-action-btn danger" onclick="confirmDelete()">Delete Account</button>
         </div>
     </div>
 
@@ -103,19 +79,6 @@
     </div>
 
     <script>
-        // Delete Account Modal
-        function confirmDelete() {
-            document.getElementById('deleteModal').style.display = 'flex';
-        }
-
-        function closeDeleteModal() {
-            document.getElementById('deleteModal').style.display = 'none';
-        }
-
-        function deleteAccount() {
-            alert('Account deletion would be processed here');
-            closeDeleteModal();
-        }
 
         // Logout Modal
         function confirmLogout(event) {
@@ -133,11 +96,7 @@
 
         // Close modal when clicking outside
         window.onclick = function(event) {
-            const deleteModal = document.getElementById('deleteModal');
             const logoutModal = document.getElementById('logoutModal');
-            if (event.target == deleteModal) {
-                closeDeleteModal();
-            }
             if (event.target == logoutModal) {
                 closeLogoutModal();
             }

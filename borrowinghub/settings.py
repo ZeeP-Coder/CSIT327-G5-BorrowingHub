@@ -52,6 +52,8 @@ INSTALLED_APPS = [
     'profile_app',
     'logout_app',
     'additem_app',
+    'viewitems_app',
+
 ]
 
 MIDDLEWARE = [

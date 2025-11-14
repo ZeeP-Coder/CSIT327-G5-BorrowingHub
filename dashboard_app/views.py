@@ -5,15 +5,16 @@ from dashboard_app.models import Item
 
 
 # -----------------------------
-# DASHBOARD VIEW (with Edit + Delete support)
+# DASHBOARD VIEW (All Items)
 # -----------------------------
 def dashboard_view(request):
-    # ✅ Session-based authentication
+    # Check login
     user_id = request.session.get('user_id')
     if not user_id:
         messages.error(request, 'Please log in to access the dashboard.')
         return redirect('login_app:login')
 
+    # Fetch logged-in user
     try:
         user = TblUser.objects.get(id=user_id)
     except TblUser.DoesNotExist:
@@ -21,9 +22,9 @@ def dashboard_view(request):
         messages.error(request, 'Invalid session. Please log in again.')
         return redirect('login_app:login')
 
-    # --------------------------------
-    # 🧾 Handle POST actions (Edit / Delete)
-    # --------------------------------
+    # -----------------------------
+    # PROCESS EDIT / DELETE
+    # -----------------------------
     if request.method == 'POST':
         action = request.POST.get('action')
         item_id = request.POST.get('item_id')
@@ -34,61 +35,67 @@ def dashboard_view(request):
             messages.error(request, "Item not found.")
             return redirect('dashboard_app:dashboard')
 
-        # 📝 EDIT ITEM
+        # SECURITY CHECK — Only owner can modify
+        if item.owner_id != user.id:
+            messages.error(request, "You cannot modify another user’s item.")
+            return redirect('dashboard_app:dashboard')
+
+        # ----- EDIT ITEM -----
         if action == 'edit':
             item.name = request.POST.get('name', item.name)
             item.description = request.POST.get('description', item.description)
 
-            # ✅ Handle multiple category checkboxes
+            # Handle multi-category checkboxes
             categories = request.POST.getlist('category')
             if categories:
                 item.category = ', '.join(categories)
-            else:
-                item.category = request.POST.get('category', item.category)
 
             item.quantity = request.POST.get('quantity', item.quantity)
             item.is_available = 'is_available' in request.POST
 
-            # ✅ Optional: update image if a new one is uploaded
+            # Replace image if uploaded
             if 'image' in request.FILES:
                 item.image = request.FILES['image']
 
             item.save()
-            messages.success(request, f'"{item.name}" was updated successfully!')
+            messages.success(request, f'"{item.name}" updated successfully!')
             return redirect('dashboard_app:dashboard')
 
-        # ❌ DELETE ITEM
+        # ----- DELETE ITEM -----
         elif action == 'delete':
-            name = item.name
+            item_name = item.name
             item.delete()
-            messages.success(request, f'"{name}" was deleted successfully!')
+            messages.success(request, f'"{item_name}" deleted successfully!')
             return redirect('dashboard_app:dashboard')
 
-    # --------------------------------
-    # 🧾 Fetch all items (GET request)
-    # --------------------------------
-    items = Item.objects.all()
+    # -----------------------------
+    # FETCH ITEMS (GET REQUEST)
+    # Dashboard shows ALL items
+    # -----------------------------
+    items = Item.objects.all().order_by('-created_at')
 
-    # 🧠 Search and filter logic
+    # SEARCH / FILTER
     search_query = request.GET.get('search', '')
     category_filter = request.GET.get('category', '')
     status_filter = request.GET.get('status', '')
 
     if search_query:
         items = items.filter(name__icontains=search_query)
+
     if category_filter and category_filter != 'All Categories':
         items = items.filter(category__icontains=category_filter)
+
     if status_filter and status_filter != 'All Status':
         if status_filter == 'Available':
             items = items.filter(is_available=True)
         elif status_filter == 'Borrowed':
             items = items.filter(is_available=False)
 
-    # 📊 Dashboard stats
+    # Dashboard statistics
     total_items = Item.objects.count()
     available_items = Item.objects.filter(is_available=True).count()
     borrowed_items = Item.objects.filter(is_available=False).count()
-    overdue_items = 0  # (optional feature)
+    overdue_items = 0  # Placeholder
 
     context = {
         'user': user,
@@ -106,7 +113,7 @@ def dashboard_view(request):
 
 
 # -----------------------------
-# PROFILE VIEW (fixes the missing reference)
+# PROFILE VIEW
 # -----------------------------
 def profile_view(request):
     user_id = request.session.get('user_id')
@@ -121,5 +128,4 @@ def profile_view(request):
         messages.error(request, 'Invalid session. Please log in again.')
         return redirect('login_app:login')
 
-    context = {'user': user}
-    return render(request, 'profile_app/profile.html', context)
+    return render(request, 'profile_app/profile.html', {'user': user})

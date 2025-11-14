@@ -1,7 +1,8 @@
 from django.db import models
+from registration_app.models import TblUser
 
-# Create your models here.
 class Item(models.Model):
+    owner = models.ForeignKey(TblUser, on_delete=models.CASCADE, null=True, blank=True)
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True)
     category = models.CharField(max_length=300, blank=True)

@@ -27,6 +27,8 @@ urlpatterns = [
     path('registration/', include('registration_app.urls')),
     path('profile/', include('profile_app.urls')),
     path('add/', include('additem_app.urls')),
+    path('viewitems/', include('viewitems_app.urls')),
+
 ]
 
 if settings.DEBUG:
