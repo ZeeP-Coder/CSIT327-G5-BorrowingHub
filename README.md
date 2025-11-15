@@ -26,6 +26,12 @@ Setup & run instructions:
   - DB_HOST=aws-1-ap-southeast-1.pooler.supabase.com
   - DB_PORT=6543
   - DB_POOL_MODE=transaction
+  - DATABASE_URL=postgresql://postgres.mbdcqebgoabagabgsjwc:borrowinghub123@aws-1-ap-southeast-1.pooler.supabase.com:6543/postgres
+  - DJANGO_SECRET_KEY=django-insecure-f*$$z)@jvhdy8m!ct+!*ny(ya(z$6hkw*ymtu!1s5mje7%jwc3
+  - DJANGO_DEBUG=True
+  - DJANGO_ALLOWED_HOSTS=borrowinghub.onrender.com,localhost,127.0.0.1
+  - DJANGO_CSRF_TRUSTED_ORIGINS=https://borrowinghub.onrender.com
+  - DJANGO_SECURE_SSL_REDIRECT=False
   - (Remember to save the file)
 - Step 4: Open terminal then type the following in order:
   - cd BorrowingHub (if you put the cloned borrowinghub inside a folder)
@@ -33,7 +39,7 @@ Setup & run instructions:
   - venv\scripts\activate
   - pip install -r requirements.txt
   - py manage.py runserver
-- Step 5: Click the link shown or go to http://127.0.0.1:8000/
+- Step 5: Click the link shown or go to http://127.0.0.1:8000/ or you could also go to http://localhost:8000/
   
 ---
 Team members (Name, Role, CIT-U Email):
@@ -47,4 +53,5 @@ Team members (Name, Role, CIT-U Email):
 
 
 Deployed link (if available):
+https://borrowinghub.onrender.com
 ---
