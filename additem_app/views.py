@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from registration_app.models import TblUser
 from .forms import ItemForm
-from dashboard_app.supabase_client import upload_item_image  # import the function
+from dashboard_app.supabase_client import upload_item_image  # ensure this path matches where you put supabase_client
 
 def add_item_view(request):
     user_id = request.session.get('user_id')
@@ -16,17 +16,18 @@ def add_item_view(request):
             item = form.save(commit=False)
             item.owner_id = user_id
 
-            # Convert checked categories into comma-separated string
             categories = form.cleaned_data.get('category', [])
             item.category = ', '.join(categories)
+
+            # Save immediately to get item.id (needed for filename)
+            item.save()
 
             # Upload image file to Supabase if provided
             image_file = form.cleaned_data.get('image_file')
             if image_file:
-                from dashboard_app.supabase_client import upload_item_image
-                item.image_url = upload_item_image(image_file)
+                item.image_url = upload_item_image(image_file, item.id)
+                item.save()
 
-            item.save()
             messages.success(request, 'Item added successfully!')
             return redirect('dashboard_app:dashboard')
     else:
