@@ -6,7 +6,7 @@ class Item(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True)
     category = models.CharField(max_length=300, blank=True)
-    image = models.ImageField(upload_to='items/', blank=True, null=True)
+    image_url = models.URLField(blank=True, null=True)
     quantity = models.PositiveIntegerField(default=1)
     is_available = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)

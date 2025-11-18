@@ -170,8 +170,9 @@ LOGIN_REDIRECT_URL = '/dashboard/'
 LOGOUT_REDIRECT_URL = '/'
 
 # Supabase (optional)
-SUPABASE_URL = os.environ.get("SUPABASE_URL")
-SUPABASE_KEY = os.environ.get("SUPABASE_KEY")
+SUPABASE_URL = 'https://mbdcqebgoabagabgsjwc.supabase.co'
+SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1iZGNxZWJnb2FiYWdhYmdzandjIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1OTQ4OTE0MiwiZXhwIjoyMDc1MDY1MTQyfQ.jAPTaFrL6rqnH_YkQI34-iq1vZnNQ6v1nz5L0BKm2aY'
+SUPABASE_BUCKET = "item-images"
 
 # Security (production toggles)
 if os.environ.get('DJANGO_SECURE_SSL_REDIRECT', 'False').lower() == 'true':

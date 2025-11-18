@@ -40,10 +40,10 @@
     <div class="item-list">
         {% for item in items %}
         <div class="item-card">
-            {% if item.image %}
-                <img src="{{ item.image.url }}" alt="{{ item.name }}">
+            {% if item.image_url %}
+            <img src="{{ item.image_url }}" alt="{{ item.name }}">
             {% else %}
-                <div class="item-placeholder">No Image</div>
+            <div class="item-placeholder">No Image</div>
             {% endif %}
 
             <h4>{{ item.name }}</h4>
@@ -124,7 +124,8 @@
             </label>
 
             <label>Image (optional):</label>
-            <input type="file" name="image" accept="image/*">
+            <input type="file" name="image_file" accept="image/*">
+
 
             <div class="modal-actions">
                 <button type="button" class="modal-btn cancel" onclick="closeModal('editModal')">Cancel</button>
@@ -161,10 +162,12 @@ function openEditModalFromButton(button) {
     const qty = button.dataset.qty || '';
     const available = button.dataset.available || '';
 
+
     document.getElementById('edit_item_id').value = id;
     document.getElementById('edit_name').value = name;
     document.getElementById('edit_description').value = desc;
     document.getElementById('edit_quantity').value = qty;
+
 
     // Uncheck all first
     document.querySelectorAll('.edit-category-checkbox').forEach(cb => cb.checked = false);

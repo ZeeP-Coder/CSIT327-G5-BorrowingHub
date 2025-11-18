@@ -23,15 +23,30 @@ class ItemForm(forms.ModelForm):
         required=True
     )
 
+    image_file = forms.FileField(
+        required=False,
+        label="Upload Image",
+        widget=forms.ClearableFileInput
+    )
+
+    image_url = forms.URLField(
+        required=False,
+        label="Image URL",
+        widget=forms.URLInput(attrs={'placeholder': 'https://example.com/image.jpg'})
+    )
+
     class Meta:
         model = Item
-        fields = ['name', 'description', 'category', 'image', 'quantity', 'is_available']
+        fields = ['name', 'description', 'category', 'image_url', 'quantity', 'is_available']
 
-    def clean_name(self):
-        name = self.cleaned_data.get('name')
-        if len(name.strip()) < 3:
-            raise forms.ValidationError("Item name must be at least 3 characters long.")
-        return name
+    def clean_image_file(self):
+        image = self.cleaned_data.get('image_file')
+        if image is None:
+            return None  # no file uploaded, skip validation
+        valid_extensions = ['jpg', 'jpeg', 'png', 'webp']
+        if not image.name.lower().endswith(tuple(valid_extensions)):
+            raise forms.ValidationError("Only JPG, PNG, and WEBP image formats are allowed.")
+        return image
 
     def clean_quantity(self):
         quantity = self.cleaned_data.get('quantity')
@@ -43,6 +58,14 @@ class ItemForm(forms.ModelForm):
         image = self.cleaned_data.get('image')
         if image:
             valid_extensions = ['jpg', 'jpeg', 'png', 'webp']
-            if not image.name.lower().endswith(tuple(valid_extensions)):
-                raise forms.ValidationError("Only JPG, PNG, and WEBP image formats are allowed.")
+        if not image.name.lower().endswith(tuple(valid_extensions)):
+            raise forms.ValidationError("Only JPG, PNG, and WEBP image formats are allowed.")
         return image
+
+    def clean(self):
+        cleaned_data = super().clean()
+        image_file = cleaned_data.get("image_file")
+        image_url = cleaned_data.get("image_url")
+        if not image_file and not image_url:
+            raise forms.ValidationError("Please provide either an image file or an image URL.")
+        return cleaned_data

@@ -2,7 +2,8 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from registration_app.models import TblUser
 from dashboard_app.models import Item
-
+from .supabase_client import upload_item_image
+from .supabase_client import supabase
 
 # -----------------------------
 # DASHBOARD VIEW (All Items)
@@ -129,3 +130,38 @@ def profile_view(request):
         return redirect('login_app:login')
 
     return render(request, 'profile_app/profile.html', {'user': user})
+
+# -----------------------------
+# ITEM IMAGE UPLOAD HANDLER
+# -----------------------------
+def add_item(request):
+    if request.method == "POST":
+        item_name = request.POST.get("item_name")
+        description = request.POST.get("description")
+        sell_price = request.POST.get("sell_price")
+        buy_price = request.POST.get("buy_price")
+        quantity = request.POST.get("quantity")
+
+        image_file = request.FILES.get("image")
+        image_url = None
+
+        if image_file:
+            # Upload to Supabase
+            file_path = f"items/{image_file.name}"
+            supabase.storage.from_("item-images").upload(
+                file_path,
+                image_file.read()
+            )
+            # Get public URL
+            image_url = supabase.storage.from_("item-images").get_public_url(file_path)
+
+        Item.objects.create(
+            item_name=item_name,
+            description=description,
+            quantity=quantity,
+            image_url=image_url,
+        )
+
+        return redirect("inventory")
+
+    return render(request, "add_item.html")
