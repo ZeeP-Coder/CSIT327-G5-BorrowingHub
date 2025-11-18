@@ -1,11 +1,11 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.conf import settings
+
 from registration_app.models import TblUser
 from dashboard_app.models import Item
 
-from supabase import create_client, Client
-import os
+from .supabase_client import upload_item_image
 
 CATEGORY_CHOICES = [
     ('Books', 'Books'),
@@ -38,7 +38,7 @@ def view_items(request):
         messages.error(request, "Invalid session. Please log in again.")
         return redirect('login_app:login')
 
-    # --- POST actions (edit / delete) ---
+    # --- POST actions ---
     if request.method == 'POST':
         action = request.POST.get('action')
         item_id = request.POST.get('item_id')
@@ -49,13 +49,14 @@ def view_items(request):
             messages.error(request, "Item not found.")
             return redirect('viewitems_app:view_items')
 
+        # Prevent editing other users' items
         if item.owner_id != user.id:
             messages.error(request, "You cannot modify another user's item.")
             return redirect('viewitems_app:view_items')
 
+        # --- EDIT ITEM ---
         if action == 'edit':
 
-            # Update simple fields
             item.name = request.POST.get('name', item.name)
             item.description = request.POST.get('description', item.description)
 
@@ -71,35 +72,23 @@ def view_items(request):
 
             item.is_available = 'is_available' in request.POST
 
-            # ---------- IMAGE UPLOAD ----------
+            # ---------- IMAGE UPLOAD FIX ----------
             image_file = request.FILES.get("image_file")
             if image_file:
-                supabase: Client = create_client(settings.SUPABASE_URL, settings.SUPABASE_KEY)
-
-                file_ext = image_file.name.split(".")[-1]
-                file_path = f"item_images/{item.id}.{file_ext}"
-
-                # Upload file
-                supabase.storage.from_("item-images").upload(
-                    file_path,
-                    image_file.read()
-                )
-
-                # Get public link
-                public_url = supabase.storage.from_("item-images").get_public_url(file_path)
-                item.image_url = public_url
+                item.image_url = upload_item_image(image_file, item.id)
 
             item.save()
             messages.success(request, f'"{item.name}" updated successfully.')
             return redirect('viewitems_app:view_items')
 
+        # --- DELETE ITEM ---
         elif action == 'delete':
             name = item.name
             item.delete()
             messages.success(request, f'"{name}" deleted successfully.')
             return redirect('viewitems_app:view_items')
 
-    # GET - show user's items
+    # --- GET: List of items ---
     items = Item.objects.filter(owner_id=user.id).order_by('-created_at')
 
     return render(request, 'viewitems_app/viewitems.html', {
