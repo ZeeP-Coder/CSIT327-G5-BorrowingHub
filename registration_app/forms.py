@@ -51,27 +51,34 @@ class CustomUserCreationForm(forms.ModelForm):
             raise forms.ValidationError('This email is already registered.')
         return email
 
-    # ⭐ PASSWORD STRENGTH VALIDATION
+    # ⭐ STRONG PASSWORD VALIDATION (bullet list)
     def clean_password1(self):
         password1 = self.cleaned_data.get('password1')
 
-        # Must be 8+ characters
+        errors = []
+
+        # 8+ characters
         if len(password1) < 8:
-            raise forms.ValidationError(
-                "Password must be at least 8 characters and include letters and numbers."
-            )
+            errors.append("• Must be at least 8 characters long")
 
-        # Must contain letters
-        if not re.search(r'[A-Za-z]', password1):
-            raise forms.ValidationError(
-                "Password must contain at least one letter."
-            )
+        # Uppercase
+        if not re.search(r'[A-Z]', password1):
+            errors.append("• Must contain at least 1 uppercase letter")
 
-        # Must contain numbers
+        # Lowercase
+        if not re.search(r'[a-z]', password1):
+            errors.append("• Must contain at least 1 lowercase letter")
+
+        # Number
         if not re.search(r'\d', password1):
-            raise forms.ValidationError(
-                "Password must contain at least one number."
-            )
+            errors.append("• Must contain at least 1 number")
+
+        # Special character
+        if not re.search(r'[^A-Za-z0-9]', password1):
+            errors.append("• Must contain at least 1 special character")
+
+        if errors:
+            raise forms.ValidationError(errors)
 
         return password1
 
@@ -81,6 +88,7 @@ class CustomUserCreationForm(forms.ModelForm):
 
         if password1 and password2 and password1 != password2:
             raise forms.ValidationError('Passwords do not match.')
+
         return password2
 
     def save(self, commit=True):
