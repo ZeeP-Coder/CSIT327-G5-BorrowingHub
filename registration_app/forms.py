@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.hashers import make_password
 from .models import TblUser
+import re
 
 class CustomUserCreationForm(forms.ModelForm):
     email = forms.EmailField(
@@ -50,9 +51,34 @@ class CustomUserCreationForm(forms.ModelForm):
             raise forms.ValidationError('This email is already registered.')
         return email
 
+    # ⭐ PASSWORD STRENGTH VALIDATION
+    def clean_password1(self):
+        password1 = self.cleaned_data.get('password1')
+
+        # Must be 8+ characters
+        if len(password1) < 8:
+            raise forms.ValidationError(
+                "Password must be at least 8 characters and include letters and numbers."
+            )
+
+        # Must contain letters
+        if not re.search(r'[A-Za-z]', password1):
+            raise forms.ValidationError(
+                "Password must contain at least one letter."
+            )
+
+        # Must contain numbers
+        if not re.search(r'\d', password1):
+            raise forms.ValidationError(
+                "Password must contain at least one number."
+            )
+
+        return password1
+
     def clean_password2(self):
         password1 = self.cleaned_data.get('password1')
         password2 = self.cleaned_data.get('password2')
+
         if password1 and password2 and password1 != password2:
             raise forms.ValidationError('Passwords do not match.')
         return password2
