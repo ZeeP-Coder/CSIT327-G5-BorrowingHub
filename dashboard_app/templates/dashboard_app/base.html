@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Dashboard - BorrowingHub{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'dashboard_app/dashboard.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+          integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+    {% block extra_css %}{% endblock %}
+</head>
+<body class="dashboard-body">
+
+    <div class="dashboard-layout">
+
+        <!-- Sidebar -->
+        <aside class="dashboard-sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo-circle">BH</div>
+                <div class="sidebar-title-group">
+                    <span class="sidebar-app-name">BorrowingHub</span>
+                    <span class="sidebar-app-tagline">Share and borrow with your community</span>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a class="sidebar-nav-item {% block nav_browse_active %}{% endblock %}" href="{% url 'dashboard_app:dashboard' %}">
+                    <i class="fa-solid fa-grid-2"></i>
+                    <span>Browse Items</span>
+                </a>
+                <a class="sidebar-nav-item {% block nav_myitems_active %}{% endblock %}" href="{% url 'viewitems_app:view_items' %}">
+                    <i class="fa-solid fa-box-open"></i>
+                    <span>My Items</span>
+                </a>
+                <a class="sidebar-nav-item {% block nav_profile_active %}{% endblock %}" href="{% url 'dashboard_app:profile' %}">
+                    <i class="fa-solid fa-user"></i>
+                    <span>Profile</span>
+                </a>
+                <a class="sidebar-nav-item" href="#" onclick="confirmLogout(event)">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    <span>Logout</span>
+                </a>
+            </nav>
+
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="dashboard-main">
+
+            <!-- Top Header / Search -->
+            <header class="dashboard-header">
+                <div class="dashboard-header-content">
+                    <form method="get" class="dashboard-search-wrapper">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input
+                            type="text"
+                            name="search"
+                            placeholder="Search for items, tools, and more..."
+                            value="{{ search_query }}">
+                    </form>
+                    <div class="dashboard-header-actions">
+                        <a href="{% url 'additem_app:add_item' %}" class="dashboard-btn red">+ Add Item</a>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Page-specific content -->
+            <div class="dashboard-container">
+                {% block content %}{% endblock %}
+            </div>
+
+        </div> <!-- /dashboard-main -->
+    </div> <!-- /dashboard-layout -->
+
+    <!-- Logout Modal -->
+    <div id="logoutModal" class="modal">
+        <div class="modal-content">
+            <h3>Confirm Logout</h3>
+            <p>Are you sure you want to logout?</p>
+            <div class="modal-actions">
+                <button class="modal-btn cancel" onclick="closeLogoutModal()">Cancel</button>
+                <button class="modal-btn confirm" onclick="confirmLogoutAction()">Yes, Logout</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function confirmLogout(event) {
+            event.preventDefault();
+            const modal = document.getElementById('logoutModal');
+            if (modal) {
+                modal.style.display = 'flex';
+            }
+        }
+        function closeLogoutModal() {
+            const modal = document.getElementById('logoutModal');
+            if (modal) {
+                modal.style.display = 'none';
+            }
+        }
+        function confirmLogoutAction() {
+            window.location.href = "{% url 'login_app:logout' %}";
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('logoutModal');
+            if (event.target === modal) {
+                closeLogoutModal();
+            }
+        }
+    </script>
+
+</body>
+</html>
+
+

@@ -1,32 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>My Items - BorrowingHub</title>
-    {% load static %}
+{% extends 'dashboard_app/base.html' %}
+{% block title %}My Items - BorrowingHub{% endblock %}
+{% load static %}
+{% block extra_css %}
     <link rel="stylesheet" href="{% static 'viewitems_app/viewitems.css' %}">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-</head>
-<body class="viewitems-body">
-
-<header class="viewitems-header">
-    <div class="viewitems-header-content">
-        <div class="viewitems-header-left">
-            <span class="viewitems-logo">BH</span>
-            <div class="viewitems-title-group">
-                <span class="viewitems-title">My Listed Items</span>
-                <span class="viewitems-subtitle">Items you added</span>
-            </div>
-        </div>
-
-        <div class="viewitems-header-right">
-            <a href="{% url 'dashboard_app:dashboard' %}" class="viewitems-btn outline">← Back to Dashboard</a>
-            <a href="{% url 'additem_app:add_item' %}" class="viewitems-btn red">+ Add Item</a>
-        </div>
-    </div>
-</header>
-
+{% endblock %}
+{% block nav_myitems_active %}active{% endblock %}
+{% block content %}
 <div class="viewitems-container">
     {% if messages %}
         <div class="messages">
@@ -205,6 +184,4 @@ window.onclick = function(event) {
     });
 };
 </script>
-
-</body>
-</html>
+{% endblock %}

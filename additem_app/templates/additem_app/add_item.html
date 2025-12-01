@@ -1,37 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Add New Item - BorrowingHub</title>
-    {% load static %}
+{% extends 'dashboard_app/base.html' %}
+{% block title %}Add New Item - BorrowingHub{% endblock %}
+{% load static %}
+{% block extra_css %}
     <link rel="stylesheet" href="{% static 'additem_app/additem.css' %}">
-</head>
-<script>
-    function confirmLogout(event) {
-        event.preventDefault();
-        if (confirm("Are you sure you want to logout?")) {
-            window.location.href = "{% url 'login_app:logout' %}";
-        }
-    }
-</script>
-<body>
-   <header class="dashboard-header" style="background:#fff;border-bottom:1px solid #f3f4f6;">
-    <div class="dashboard-header-content" style="max-width:1400px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 32px;min-height:80px;">
-        <div class="dashboard-header-left" style="display:flex;align-items:center;gap:16px;">
-            <span style="width:44px;height:44px;border-radius:12px;background:#ef4444;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.3rem;">BH</span>
-            <div style="display:flex;flex-direction:column;align-items:flex-start;">
-                <span style="font-size:1.2rem;font-weight:700;color:#0f172a;">Borrowing Hub</span>
-                <span style="color:#64748b;font-size:0.95rem;margin-top:2px;">Add a new item to your inventory</span>
-            </div>
-        </div>
-        <div class="dashboard-header-right" style="display:flex;align-items:center;gap:16px;">
-            <a href="{% url 'dashboard_app:profile' %}" class="dashboard-header-link" style="color:#ef4444;font-weight:700;padding:10px 18px;border-radius:8px;font-size:1rem;text-decoration:none;transition:background 0.2s;margin-left:8px;">Profile</a>
-            <a href="#" onclick="confirmLogout(event)" class="dashboard-header-link" style="color:#ef4444;font-weight:700;padding:10px 18px;border-radius:8px;font-size:1rem;text-decoration:none;transition:background 0.2s;">Logout</a>
-        </div>
-    </div>
-</header>
-
-
+{% endblock %}
+{% block content %}
    <main class="additem-wrapper">
     <div class="additem-card">
         <h2>Add New Item</h2>
@@ -69,5 +42,4 @@
         <a href="{% url 'dashboard_app:dashboard' %}" class="back-link">← Back to Dashboard</a>
     </div>
 </main>
-</body>
-</html>
+{% endblock %}

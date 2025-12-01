@@ -1,171 +1,133 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - BorrowingHub</title>
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'dashboard_app/dashboard.css' %}">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-</head>
-<body class="dashboard-body">
+{% extends 'dashboard_app/base.html' %}
+{% block title %}Dashboard - BorrowingHub{% endblock %}
+{% block nav_browse_active %}active{% endblock %}
+{% block content %}
 
-    <!-- Header -->
-    <header class="dashboard-header">
-        <div class="dashboard-header-content">
-            <div class="dashboard-header-left">
-                <div class="dashboard-logo">BH</div>
-                <div class="dashboard-title-group">
-                    <span class="dashboard-title">Borrowing Hub</span>
-                    <span class="dashboard-subtitle">Track your borrowed items</span>
+                <div class="dashboard-page-header">
+                    <div>
+                        <h1 class="page-title">Browse Items</h1>
+                        <p class="page-subtitle">Find and borrow items from your community</p>
+                    </div>
+                    <div class="page-summary">
+                        <span class="summary-label">Showing</span>
+                        <span class="summary-value">{{ items|length }} items</span>
+                    </div>
                 </div>
-            </div>
-            <div class="dashboard-header-right">
-                <a href="{% url 'additem_app:add_item' %}" class="dashboard-btn red">+ Add Item</a>
-                <a href="{% url 'viewitems_app:view_items' %}" class="dashboard-btn outline">My Items</a>
-                <a href="{% url 'dashboard_app:profile' %}" class="dashboard-btn outline">Profile</a>
-                <a href="#" onclick="confirmLogout(event)" class="dashboard-btn outline">Logout</a>
-            </div>
-        </div>
-    </header>
 
-    <!-- Dashboard Container -->
-    <div class="dashboard-container">
-
-        {% if messages %}
-        <div class="dashboard-messages">
-            {% for message in messages %}
-                <div class="dashboard-alert dashboard-alert-{{ message.tags }}">{{ message }}</div>
-            {% endfor %}
-        </div>
-        {% endif %}
-
-        <!-- Stats Section -->
-        <div class="dashboard-stats-row">
-            <div class="dashboard-stat-card red">
-                <i class="fa fa-box"></i>
-                <div>
-                    <div class="stat-number">{{ total_items }}</div>
-                    <div class="stat-label">Total Items</div>
+                {% if messages %}
+                <div class="dashboard-messages">
+                    {% for message in messages %}
+                        <div class="dashboard-alert dashboard-alert-{{ message.tags }}">{{ message }}</div>
+                    {% endfor %}
                 </div>
-            </div>
-            <div class="dashboard-stat-card green">
-                <i class="fa fa-check"></i>
-                <div>
-                    <div class="stat-number">{{ available_items }}</div>
-                    <div class="stat-label">Available</div>
-                </div>
-            </div>
-            <div class="dashboard-stat-card yellow">
-                <i class="fa fa-user-friends"></i>
-                <div>
-                    <div class="stat-number">{{ borrowed_items }}</div>
-                    <div class="stat-label">Borrowed</div>
-                </div>
-            </div>
-            <div class="dashboard-stat-card red">
-                <i class="fa fa-exclamation-triangle"></i>
-                <div>
-                    <div class="stat-number">{{ overdue_items }}</div>
-                    <div class="stat-label">Overdue</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Filter Form -->
-        <form method="get" class="dashboard-filter-row">
-            <input type="text" name="search" placeholder="Search items..." value="{{ search_query }}">
-            <select name="category" onchange="this.form.submit()">
-                <option {% if category_filter == 'All Categories' or not category_filter %}selected{% endif %}>All Categories</option>
-                <option {% if category_filter == 'Books' %}selected{% endif %}>Books</option>
-                <option {% if category_filter == 'Electronics' %}selected{% endif %}>Electronics</option>
-                <option {% if category_filter == 'Tools' %}selected{% endif %}>Tools</option>
-                <option {% if category_filter == 'Sports' %}selected{% endif %}>Sports</option>
-                <option {% if category_filter == 'School Supplies' %}selected{% endif %}>School Supplies</option>
-                <option {% if category_filter == 'Board Games' %}selected{% endif %}>Board Games</option>
-                <option {% if category_filter == 'Sports Equipment' %}selected{% endif %}>Sports Equipment</option>
-                <option {% if category_filter == 'Toys & Games' %}selected{% endif %}>Toys & Games</option>
-                <option {% if category_filter == 'Furniture' %}selected{% endif %}>Furniture</option>
-                <option {% if category_filter == 'Kitchen Appliances' %}selected{% endif %}>Kitchen Appliances</option>
-                <option {% if category_filter == 'Cleaning Equipment' %}selected{% endif %}>Cleaning Equipment</option>
-                <option {% if category_filter == 'Miscellaneous / Others' %}selected{% endif %}>Miscellaneous / Others</option>
-            </select>
-
-            <select name="status" onchange="this.form.submit()">
-                <option {% if status_filter == 'All Status' or not status_filter %}selected{% endif %}>All Status</option>
-                <option {% if status_filter == 'Available' %}selected{% endif %}>Available</option>
-                <option {% if status_filter == 'Borrowed' %}selected{% endif %}>Borrowed</option>
-            </select>
-
-            <button type="submit" class="dashboard-btn red small">Apply</button>
-        </form>
-
-        <!-- Items List -->
-        {% if items %}
-        <div class="item-list">
-            {% for item in items %}
-            <div class="item-card">
-                {% if item.image_url %}
-                    <img src="{{ item.image_url }}" alt="{{ item.name }}">
-                {% else %}
-                    <div class="item-placeholder">No Image</div>
                 {% endif %}
-            <h4>{{ item.name }}</h4>
-            <p class="item-owner"><strong>Owner:</strong> {{ item.owner.username }}</p>
-            <p class="item-desc">{{ item.description|truncatechars:100 }}</p>
-            <p><strong>Category:</strong> {{ item.category }}</p>
-            <p><strong>Status:</strong>
-            {% if item.is_available %}
-                <span class="available">Available</span>
-            {% else %}
-                <span class="borrowed">Borrowed</span>
-            {% endif %}
-        </p>
-    </div>
-            {% endfor %}
-        </div>
-        {% else %}
-        <div class="dashboard-empty-state">
-            <div class="empty-icon"><i class="fa fa-box"></i></div>
-            <h3>No items yet</h3>
-            <p>Start by adding your first item to track.</p>
-            <a href="{% url 'additem_app:add_item' %}" class="dashboard-action-btn">Add Your First Item</a>
-        </div>
-        {% endif %}
-    </div>
 
-    <!-- Logout Modal -->
-    <div id="logoutModal" class="modal">
-        <div class="modal-content">
-            <h3>Confirm Logout</h3>
-            <p>Are you sure you want to logout?</p>
-            <div class="modal-actions">
-                <button class="modal-btn cancel" onclick="closeLogoutModal()">Cancel</button>
-                <button class="modal-btn confirm" onclick="confirmLogoutAction()">Yes, Logout</button>
-            </div>
-        </div>
-    </div>
+                <!-- Stats Section -->
+                <div class="dashboard-stats-row">
+                    <div class="dashboard-stat-card red">
+                        <i class="fa-solid fa-box-archive"></i>
+                        <div>
+                            <div class="stat-number">{{ total_items }}</div>
+                            <div class="stat-label">Total Items</div>
+                        </div>
+                    </div>
+                    <div class="dashboard-stat-card green">
+                        <i class="fa-solid fa-circle-check"></i>
+                        <div>
+                            <div class="stat-number">{{ available_items }}</div>
+                            <div class="stat-label">Available</div>
+                        </div>
+                    </div>
+                    <div class="dashboard-stat-card yellow">
+                        <i class="fa-solid fa-hand-holding"></i>
+                        <div>
+                            <div class="stat-number">{{ borrowed_items }}</div>
+                            <div class="stat-label">Borrowed</div>
+                        </div>
+                    </div>
+                    <div class="dashboard-stat-card red">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                        <div>
+                            <div class="stat-number">{{ overdue_items }}</div>
+                            <div class="stat-label">Overdue</div>
+                        </div>
+                    </div>
+                </div>
 
-    <script>
-        function confirmLogout(event) {
-            event.preventDefault();
-            document.getElementById('logoutModal').style.display = 'flex';
-        }
-        function closeLogoutModal() {
-            document.getElementById('logoutModal').style.display = 'none';
-        }
-        function confirmLogoutAction() {
-            window.location.href = "{% url 'login_app:logout' %}";
-        }
+                <!-- Filter Form -->
+                <form method="get" class="dashboard-filter-row">
+                    <div class="filter-main-controls">
+                        <select name="category" onchange="this.form.submit()">
+                            <option {% if category_filter == 'All Categories' or not category_filter %}selected{% endif %}>All Categories</option>
+                            <option {% if category_filter == 'Books' %}selected{% endif %}>Books</option>
+                            <option {% if category_filter == 'Electronics' %}selected{% endif %}>Electronics</option>
+                            <option {% if category_filter == 'Tools' %}selected{% endif %}>Tools</option>
+                            <option {% if category_filter == 'Sports' %}selected{% endif %}>Sports</option>
+                            <option {% if category_filter == 'School Supplies' %}selected{% endif %}>School Supplies</option>
+                            <option {% if category_filter == 'Board Games' %}selected{% endif %}>Board Games</option>
+                            <option {% if category_filter == 'Sports Equipment' %}selected{% endif %}>Sports Equipment</option>
+                            <option {% if category_filter == 'Toys & Games' %}selected{% endif %}>Toys & Games</option>
+                            <option {% if category_filter == 'Furniture' %}selected{% endif %}>Furniture</option>
+                            <option {% if category_filter == 'Kitchen Appliances' %}selected{% endif %}>Kitchen Appliances</option>
+                            <option {% if category_filter == 'Cleaning Equipment' %}selected{% endif %}>Cleaning Equipment</option>
+                            <option {% if category_filter == 'Miscellaneous / Others' %}selected{% endif %}>Miscellaneous / Others</option>
+                        </select>
+                        <select name="status" onchange="this.form.submit()">
+                            <option {% if status_filter == 'All Status' or not status_filter %}selected{% endif %}>All Status</option>
+                            <option {% if status_filter == 'Available' %}selected{% endif %}>Available</option>
+                            <option {% if status_filter == 'Borrowed' %}selected{% endif %}>Borrowed</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="dashboard-btn red small">Apply</button>
+                </form>
 
-        window.onclick = function(event) {
-            const modals = ['logoutModal'];
-            modals.forEach(m => {
-                const modal = document.getElementById(m);
-                if (event.target == modal) modal.style.display = "none";
-            });
-        }
-    </script>
-
-</body>
-</html>
+                <!-- Items List -->
+                {% if items %}
+                <div class="item-list">
+                    {% for item in items %}
+                    <div class="item-card">
+                        <div class="item-card-image-wrapper">
+                            {% if item.image_url %}
+                                <img src="{{ item.image_url }}" alt="{{ item.name }}">
+                            {% else %}
+                                <div class="item-placeholder">No Image</div>
+                            {% endif %}
+                            <span class="item-status-pill {% if item.is_available %}status-available{% else %}status-borrowed{% endif %}">
+                                {% if item.is_available %}Available{% else %}Borrowed{% endif %}
+                            </span>
+                        </div>
+                        <div class="item-card-body">
+                            <div class="item-card-meta">
+                                <span class="item-category-pill">{{ item.category }}</span>
+                            </div>
+                            <h4 class="item-title">{{ item.name }}</h4>
+                            <p class="item-owner"><strong>Owner:</strong> {{ item.owner.username }}</p>
+                            <p class="item-desc">{{ item.description|truncatechars:100 }}</p>
+                            <div class="item-card-footer">
+                                <div class="item-card-footer-left">
+                                    <span class="item-status-label">
+                                        <strong>Status:</strong>
+                                        {% if item.is_available %}
+                                            <span class="available">Available</span>
+                                        {% else %}
+                                            <span class="borrowed">Borrowed</span>
+                                        {% endif %}
+                                    </span>
+                                </div>
+                                <div class="item-card-footer-right">
+                                    <!-- Placeholder for future actions like Request to Borrow -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="dashboard-empty-state">
+                    <div class="empty-icon"><i class="fa-solid fa-box-archive"></i></div>
+                    <h3>No items yet</h3>
+                    <p>Start by adding your first item to track.</p>
+                    <a href="{% url 'additem_app:add_item' %}" class="dashboard-action-btn">Add Your First Item</a>
+                </div>
+                {% endif %}
+{% endblock %}
