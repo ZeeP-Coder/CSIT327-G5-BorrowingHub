@@ -28,6 +28,8 @@ urlpatterns = [
     path('profile/', include('profile_app.urls')),
     path('add/', include('additem_app.urls')),
     path('viewitems/', include('viewitems_app.urls')),
+    path('requests/', include('request_app.urls')),
+    path('calendar/', include('calendar_app.urls')),
 
 ]
 

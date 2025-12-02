@@ -36,6 +36,14 @@
                     <i class="fa-solid fa-box-open"></i>
                     <span>My Items</span>
                 </a>
+                <a class="sidebar-nav-item {% block nav_requests_active %}{% endblock %}" href="{% url 'request_app:history' %}">
+                    <i class="fa-solid fa-list-check"></i>
+                    <span>My Requests</span>
+                </a>
+                <a class="sidebar-nav-item {% block nav_calendar_active %}{% endblock %}" href="{% url 'calendar_app:calendar' %}">
+                    <i class="fa-solid fa-calendar-days"></i>
+                    <span>Calendar</span>
+                </a>
                 <a class="sidebar-nav-item {% block nav_profile_active %}{% endblock %}" href="{% url 'dashboard_app:profile' %}">
                     <i class="fa-solid fa-user"></i>
                     <span>Profile</span>
@@ -113,6 +121,8 @@
             }
         }
     </script>
+
+        {% block extra_js %}{% endblock %}
 
 </body>
 </html>

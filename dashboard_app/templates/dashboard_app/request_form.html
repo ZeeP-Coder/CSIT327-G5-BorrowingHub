@@ -1,0 +1,15 @@
+{% extends 'dashboard_app/base.html' %}
+{% block title %}Request Item - BorrowingHub{% endblock %}
+{% block content %}
+  <div class="page-header">
+    <h1>Request: {{ item.name }}</h1>
+    <p>Owner: {{ item.owner.username }}</p>
+  </div>
+
+  <form method="post" class="request-form">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="dashboard-btn green">Send Request</button>
+    <a href="{% url 'dashboard_app:borrow_request_list' %}" class="dashboard-btn">Back</a>
+  </form>
+{% endblock %}

@@ -1,0 +1,129 @@
+{% extends 'dashboard_app/base.html' %}
+{% load static %}
+{% block title %}Calendar - BorrowingHub{% endblock %}
+{% block content %}
+<div class="dashboard-container">
+  <div class="dashboard-page-header">
+    <div>
+      <h1 class="page-title">Calendar</h1>
+      <p class="page-subtitle">Upcoming due dates for your borrowed items (next 30 days).</p>
+    </div>
+    <div>
+      <a href="{% url 'dashboard_app:dashboard' %}" class="dashboard-btn outline small">Back to Dashboard</a>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:20px;align-items:flex-start;">
+    <div style="flex:1">
+      <div id="calendar"></div>
+    </div>
+
+    <div style="width:360px;">
+      <h3>Upcoming Summary</h3>
+      <div style="background:#fff;border-radius:12px;padding:12px;box-shadow:0 2px 8px #0001;">
+        <p>Events for the next year will appear on the calendar. Click an event to view details.</p>
+        <div id="calendar-legend" style="margin-top:12px;">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;"><span style="width:12px;height:12px;background:#f59e0b;display:inline-block;border-radius:3px"></span> Your Returns</div>
+          <div style="display:flex;align-items:center;gap:8px;"><span style="width:12px;height:12px;background:#ef4444;display:inline-block;border-radius:3px"></span> Items Due Back to You</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Detail modal for event -->
+  <div id="detailModal" class="modal requests-modal" style="display:none;">
+    <div class="modal-inner">
+      <header class="modal-header">
+        <h3 id="detailModalTitle">Request Detail</h3>
+        <button id="closeDetailModal" class="modal-close">×</button>
+      </header>
+      <div class="modal-body" id="detailModalBody">
+        <!-- content loaded via fetch -->
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block extra_css %}
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.css" rel="stylesheet">
+{% endblock %}
+{% block extra_js %}
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+          const cookies = document.cookie.split(';');
+          for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+              cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+              break;
+            }
+          }
+        }
+        return cookieValue;
+      }
+      
+      var calendarEl = document.getElementById('calendar');
+      if (calendarEl) {
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+          initialView: 'dayGridMonth',
+          headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,dayGridWeek'
+          },
+          height: 'auto',
+          contentHeight: 'auto',
+          events: '{% url "calendar_app:calendar_events" %}',
+          eventClick: function(info) {
+            var props = info.event.extendedProps || {};
+            var brId = props.borrow_request_id;
+            if (brId) {
+              var url = '/dashboard/requests/detail/' + brId + '/';
+              fetch(url, {headers: {'X-Requested-With': 'XMLHttpRequest'}})
+                .then(r => r.text())
+                .then(html => {
+                  document.getElementById('detailModalBody').innerHTML = html;
+                  document.getElementById('detailModal').style.display = 'block';
+                  document.getElementById('closeDetailModal').onclick = function() {
+                    document.getElementById('detailModal').style.display = 'none';
+                  };
+                  setTimeout(function() {
+                    var approveBtns = document.querySelectorAll('.approve-request');
+                    var rejectBtns = document.querySelectorAll('.reject-request');
+                    function attach(btns) {
+                      btns.forEach(function(b) {
+                        b.addEventListener('click', function() {
+                          var u = this.dataset.url;
+                          fetch(u, {
+                            method: 'POST',
+                            headers: {'X-CSRFToken': getCookie('csrftoken')}
+                          })
+                          .then(res => res.json())
+                          .then(data => {
+                            if (data.success) {
+                              location.reload();
+                            } else {
+                              alert(data.error || 'Error');
+                            }
+                          });
+                        });
+                      });
+                    }
+                    attach(approveBtns);
+                    attach(rejectBtns);
+                  }, 50);
+                })
+                .catch(err => console.error('Fetch error:', err));
+            } else {
+              alert(info.event.title + '\nDate: ' + info.event.start.toLocaleDateString());
+            }
+          }
+        });
+        calendar.render();
+      }
+    });
+  </script>
+{% endblock %}

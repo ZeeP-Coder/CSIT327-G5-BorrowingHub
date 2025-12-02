@@ -2,6 +2,7 @@
 {% block title %}Dashboard - BorrowingHub{% endblock %}
 {% block nav_browse_active %}active{% endblock %}
 {% block content %}
+{% load static %}
 
                 <div class="dashboard-page-header">
                     <div>
@@ -11,6 +12,9 @@
                     <div class="page-summary">
                         <span class="summary-label">Showing</span>
                         <span class="summary-value">{{ items|length }} items</span>
+                    </div>
+                    <div class="page-actions">
+                        <button id="openRequestsModal" class="dashboard-btn">View Requests <span class="request-count">{{ pending_requests_count }}</span></button>
                     </div>
                 </div>
 
@@ -45,6 +49,13 @@
                             <div class="stat-label">Borrowed</div>
                         </div>
                     </div>
+                    <div class="dashboard-stat-card red">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                        <div>
+                            <div class="stat-number">{{ overdue_items }}</div>
+                            <div class="stat-label">Overdue</div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Filter Form -->
@@ -73,6 +84,39 @@
                     </div>
                     <button type="submit" class="dashboard-btn red small">Apply</button>
                 </form>
+                
+{# Requests modal will show pending requests; do not display inline on dashboard #}
+
+<!-- Requests Modal -->
+<div id="requestsModal" class="modal requests-modal" aria-hidden="true" style="display:none;">
+    <div class="modal-inner">
+        <header class="modal-header">
+            <h3>Pending Requests <span class="request-count">{{ pending_requests_count }}</span></h3>
+            <button id="closeRequestsModal" class="modal-close">×</button>
+        </header>
+        <div class="modal-body">
+            {% if borrow_requests and borrow_requests|length > 0 %}
+                <div class="requests-list">
+                    {% for br in borrow_requests %}
+                        <div class="request-row">
+                            <div class="request-left">
+                                <div class="request-item-name">{{ br.item.name }}</div>
+                                <div class="request-meta">by <strong>{{ br.borrower.username }}</strong> — due: {{ br.due_date }}</div>
+                            </div>
+                            <div class="request-actions">
+                                <button class="dashboard-btn green small approve-request" data-request-id="{{ br.id }}" data-url="{% url 'dashboard_app:approve_borrow_request_ajax' br.id %}">Approve</button>
+                                <button class="dashboard-btn red small reject-request" data-request-id="{{ br.id }}" data-url="{% url 'dashboard_app:reject_borrow_request_ajax' br.id %}">Reject</button>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="muted">No pending requests.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
 
                 <!-- Items List -->
                 {% if items %}
@@ -109,6 +153,13 @@
                                 </div>
                                 <div class="item-card-footer-right">
                                     <!-- Placeholder for future actions like Request to Borrow -->
+                                        <div class="item-card-footer-right">
+                                        {% if item.is_available %}
+                                        <a href="{% url 'dashboard_app:borrow_request_create' item.id %}" class="dashboard-btn outline small">Request</a>
+                                        {% else %}
+                                            <span class="dashboard-badge red">Not Available</span>
+                                        {% endif %}
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -123,4 +174,8 @@
                     <a href="{% url 'additem_app:add_item' %}" class="dashboard-action-btn">Add Your First Item</a>
                 </div>
                 {% endif %}
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'dashboard_app/js/requests.js' %}"></script>
 {% endblock %}

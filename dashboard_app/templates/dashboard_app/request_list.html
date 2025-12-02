@@ -1,0 +1,99 @@
+{% extends 'dashboard_app/base.html' %}
+{% load static %}
+{% block title %}Borrow Requests - BorrowingHub{% endblock %}
+{% block content %}
+<div class="dashboard-container">
+  <div class="dashboard-page-header">
+    <div>
+      <h1 class="page-title">Borrow Requests</h1>
+      <p class="page-subtitle">Manage incoming requests and view your requests.</p>
+    </div>
+    <div>
+      <a href="{% url 'dashboard_app:dashboard' %}" class="dashboard-btn outline small">Back to Dashboard</a>
+    </div>
+  </div>
+
+  <div class="requests-grid" style="display:flex;gap:20px;align-items:flex-start;">
+    <div style="flex:1">
+      <h3>Incoming Requests</h3>
+      {% if incoming %}
+        <div class="item-list" style="grid-template-columns:1fr;">
+          {% for br in incoming %}
+            <div class="item-card">
+              <div style="display:flex;gap:12px;align-items:center;padding:12px;">
+                <div style="width:84px;height:64px;flex-shrink:0;overflow:hidden;border-radius:8px;background:#f3f4f6;">
+                  {% if br.item.image_url %}
+                    <img src="{{ br.item.image_url }}" alt="{{ br.item.name }}" style="width:100%;height:100%;object-fit:cover;">
+                  {% else %}
+                    <div style="display:flex;align-items:center;justify-content:center;height:100%;color:#9ca3af;">No Image</div>
+                  {% endif %}
+                </div>
+                <div style="flex:1">
+                  <div style="display:flex;justify-content:space-between;align-items:center;">
+                    <div>
+                      <h4 class="item-title" style="margin:0">{{ br.item.name }}</h4>
+                      <div class="item-owner" style="color:#64748b;font-size:0.9rem">Requested by <strong>{{ br.borrower.username }}</strong></div>
+                    </div>
+                    <div>
+                      {% if br.status == 'Pending' %}
+                        <span class="item-status-pill status-available">Pending</span>
+                      {% elif br.status == 'Approved' %}
+                        <span class="item-status-pill status-borrowed">Approved</span>
+                      {% else %}
+                        <span class="item-status-pill" style="background:#fee2e2;color:#b91c1c;">{{ br.status }}</span>
+                      {% endif %}
+                    </div>
+                  </div>
+                  <p style="margin:6px 0 0;color:#475569">Due date: {% if br.due_date %}{{ br.due_date }}{% else %}-{% endif %}</p>
+                </div>
+              </div>
+              <div style="padding:12px;border-top:1px solid #f3f4f6;display:flex;gap:8px;justify-content:flex-end;">
+                {% if br.status == 'Pending' and br.item.owner == user %}
+                  <button class="dashboard-btn green small approve-request" data-request-id="{{ br.id }}" data-url="{% url 'dashboard_app:approve_borrow_request_ajax' br.id %}">Approve</button>
+                  <button class="dashboard-btn red small reject-request" data-request-id="{{ br.id }}" data-url="{% url 'dashboard_app:reject_borrow_request_ajax' br.id %}">Reject</button>
+                {% else %}
+                  <span class="dashboard-badge">{{ br.status }}</span>
+                {% endif %}
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p>No incoming requests.</p>
+      {% endif %}
+    </div>
+
+    <div style="width:380px;">
+      <h3>My Requests</h3>
+      <div style="background:#fff;border-radius:12px;box-shadow:0 2px 8px #0001;padding:12px;">
+        {% if mine %}
+          <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;">
+            {% for br in mine %}
+              <li style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
+                <div>
+                  <div style="font-weight:700">{{ br.item.name }}</div>
+                  <div style="color:#64748b;font-size:0.9rem">Owner: {{ br.item.owner.username }}</div>
+                  {% if br.due_date %}<div style="color:#475569;font-size:0.9rem">Due: {{ br.due_date }}</div>{% endif %}
+                </div>
+                <div>
+                  {% if br.status == 'Pending' %}
+                    <span class="item-status-pill status-available">Pending</span>
+                  {% elif br.status == 'Approved' %}
+                    <span class="item-status-pill status-borrowed">Approved</span>
+                  {% else %}
+                    <span class="item-status-pill" style="background:#fee2e2;color:#b91c1c;">{{ br.status }}</span>
+                  {% endif %}
+                </div>
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p>You have not made any requests.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <script src="{% static 'dashboard_app/js/requests.js' %}"></script>
+</div>
+{% endblock %}
