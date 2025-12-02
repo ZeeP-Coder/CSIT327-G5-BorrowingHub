@@ -314,9 +314,10 @@ body.dashboard-body {
 
 /* ITEM LIST */
 .item-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 20px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 items per row */
+    gap: 20px;
+    margin-top: 20px;
 }
 .item-card {
   background: #fff;
@@ -327,17 +328,25 @@ body.dashboard-body {
   flex-direction: column;
   overflow: hidden;
 }
+
 .item-card-image-wrapper {
-  position: relative;
-  width: 100%;
-  height: 190px;
-  overflow: hidden;
+    width: 100%;
+    height: 170px;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #e5e7eb;
+    position: relative;
 }
 .item-card img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
+.item-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+}
+
 .item-placeholder {
   width: 100%;
   height: 100%;
