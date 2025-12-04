@@ -49,8 +49,8 @@
               </div>
               <div style="padding:12px;border-top:1px solid #f3f4f6;display:flex;gap:8px;justify-content:flex-end;">
                 {% if br.status == 'Pending' and br.item.owner == user %}
-                  <button class="dashboard-btn green small approve-request" data-request-id="{{ br.id }}" data-url="{% url 'dashboard_app:approve_borrow_request_ajax' br.id %}">Approve</button>
-                  <button class="dashboard-btn red small reject-request" data-request-id="{{ br.id }}" data-url="{% url 'dashboard_app:reject_borrow_request_ajax' br.id %}">Reject</button>
+                  <button class="dashboard-btn green small approve-request" data-request-id="{{ br.id }}" data-url="{% url 'request_app:approve_borrow_request_ajax' br.id %}">Approve</button>
+                  <button class="dashboard-btn red small reject-request" data-request-id="{{ br.id }}" data-url="{% url 'request_app:reject_borrow_request_ajax' br.id %}">Reject</button>
                 {% else %}
                   <span class="dashboard-badge">{{ br.status }}</span>
                 {% endif %}

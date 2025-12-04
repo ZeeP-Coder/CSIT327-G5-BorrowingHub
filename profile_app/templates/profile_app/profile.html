@@ -1,47 +1,360 @@
 {% extends 'dashboard_app/base.html' %}
-{% block title %}Profile - Borrowing Hub{% endblock %}
+{% block title %}Profile - BorrowingHub{% endblock %}
 {% load static %}
-{% block extra_css %}
-    <link rel="stylesheet" href="{% static 'profile_app/profile.css' %}">
-{% endblock %}
 {% block nav_profile_active %}active{% endblock %}
 {% block content %}
-    <div class="dashboard-container">
-        <h1>Your Profile</h1>
-        <div class="dashboard-subtitle">View and update your account details below.</div>
-        
-        <!-- Personal Information Section -->
-        <div class="profile-section">
-            <h2 class="profile-section-title">Personal Information</h2>
-            <div class="profile-info-grid">
-                <div class="profile-info-item">
-                    <b><span class="profile-label">Username: </span></b>
-                    <span class="profile-value">{{ user.username }}</span>
-                </div>
-                <div class="profile-info-item">
-                    <b><span class="profile-label">Email: </span></b>
-                    <span class="profile-value">{{ user.email }}</span>
-                </div>
-            </div>
-        </div>
+<style>
+.profile-container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.profile-header {
+  margin-bottom: 32px;
+}
+.profile-header h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 8px 0;
+}
+.profile-header p {
+  color: #64748b;
+  font-size: 15px;
+  margin: 0;
+}
+.profile-grid {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+.profile-sidebar {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  padding: 32px 24px;
+  text-align: center;
+  height: fit-content;
+}
+.profile-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  font-size: 48px;
+  font-weight: 700;
+  color: white;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+.profile-name {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 6px 0;
+}
+.profile-email {
+  font-size: 14px;
+  color: #64748b;
+  margin: 0 0 24px 0;
+}
+.profile-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-top: 24px;
+  border-top: 1px solid #e2e8f0;
+}
+.profile-stat {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.profile-stat-label {
+  font-size: 13px;
+  color: #64748b;
+  font-weight: 600;
+}
+.profile-stat-value {
+  font-size: 16px;
+  color: #1e293b;
+  font-weight: 700;
+}
+.profile-main {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.profile-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  padding: 24px;
+}
+.profile-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid #e2e8f0;
+}
+.profile-card-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0;
+}
+.profile-card-subtitle {
+  font-size: 14px;
+  color: #64748b;
+  margin: 0 0 20px 0;
+}
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+.info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.info-label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #64748b;
+}
+.info-value {
+  font-size: 16px;
+  color: #1e293b;
+  font-weight: 600;
+}
+.btn {
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+  display: inline-block;
+  border: none;
+}
+.btn-primary {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+}
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+}
+.btn-outline {
+  background: transparent;
+  color: #ef4444;
+  border: 2px solid #ef4444;
+}
+.btn-outline:hover {
+  background: #fef2f2;
+}
 
-        <!-- Password Management Section -->
-        <div class="profile-section">
-            <h2 class="profile-section-title">Password & Security</h2>
-            <p class="profile-section-desc">Update your password to keep your account secure.</p>
-            <a href="#" class="dashboard-action-btn secondary">Change Password</a>
-        </div>
+/* Change Password Modal */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  animation: fadeIn 0.2s;
+}
+.modal.active {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.modal-content {
+  background: white;
+  border-radius: 12px;
+  padding: 32px;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+}
+.modal-content h3 {
+  margin: 0 0 8px 0;
+  font-size: 22px;
+  font-weight: 700;
+  color: #1e293b;
+}
+.modal-content p {
+  margin: 0 0 24px 0;
+  color: #64748b;
+  font-size: 14px;
+}
+.form-group {
+  margin-bottom: 20px;
+}
+.form-group label {
+  display: block;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+.form-group input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 15px;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+.form-group input:focus {
+  outline: none;
+  border-color: #ef4444;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+.modal-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 24px;
+}
+.error-message {
+  background: #fee2e2;
+  color: #991b1b;
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+.success-message {
+  background: #d1fae5;
+  color: #065f46;
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+</style>
+
+<div class="profile-container">
+  <div class="profile-header">
+    <h1>My Profile</h1>
+    <p>Manage your account information and security settings</p>
+  </div>
+
+  {% if messages %}
+    {% for message in messages %}
+      <div class="{% if message.tags == 'success' %}success-message{% else %}error-message{% endif %}">
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
+
+  <div class="profile-grid">
+    <!-- Sidebar -->
+    <div class="profile-sidebar">
+      <div class="profile-avatar">
+        {{ user.username|first|upper }}
+      </div>
+      <h2 class="profile-name">{{ user.username }}</h2>
+      <p class="profile-email">{{ user.email }}</p>
     </div>
 
-    <!-- Delete Confirmation Modal -->
-    <div id="deleteModal" class="modal">
-        <div class="modal-content">
-            <h3>Delete Account</h3>
-            <p>Are you sure you want to delete your account? This action cannot be undone and all your data will be permanently removed.</p>
-            <div class="modal-actions">
-                <button class="modal-btn cancel" onclick="closeDeleteModal()">Cancel</button>
-                <button class="modal-btn confirm" onclick="deleteAccount()">Yes, Delete My Account</button>
-            </div>
+    <!-- Main Content -->
+    <div class="profile-main">
+      <!-- Personal Information -->
+      <div class="profile-card">
+        <div class="profile-card-header">
+          <h3 class="profile-card-title">Personal Information</h3>
         </div>
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="info-label">Username</span>
+            <span class="info-value">{{ user.username }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Email Address</span>
+            <span class="info-value">{{ user.email }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Security Settings -->
+      <div class="profile-card">
+        <div class="profile-card-header">
+          <h3 class="profile-card-title">Security Settings</h3>
+        </div>
+        <p class="profile-card-subtitle">Keep your account secure by updating your password regularly</p>
+        <button onclick="openChangePasswordModal()" class="btn btn-primary">
+          <i class="fa-solid fa-lock"></i> Change Password
+        </button>
+      </div>
     </div>
+  </div>
+</div>
+
+<!-- Change Password Modal -->
+<div id="changePasswordModal" class="modal">
+  <div class="modal-content">
+    <h3>Change Password</h3>
+    <p>Enter your current password and choose a new one</p>
+    
+    <form method="post" action="{% url 'profile_app:change_password' %}">
+      {% csrf_token %}
+      
+      <div class="form-group">
+        <label for="current_password">Current Password</label>
+        <input type="password" id="current_password" name="current_password" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="new_password">New Password</label>
+        <input type="password" id="new_password" name="new_password" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="confirm_password">Confirm New Password</label>
+        <input type="password" id="confirm_password" name="confirm_password" required>
+      </div>
+      
+      <div class="modal-actions">
+        <button type="button" class="btn btn-outline" onclick="closeChangePasswordModal()">Cancel</button>
+        <button type="submit" class="btn btn-primary">Update Password</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+function openChangePasswordModal() {
+  document.getElementById('changePasswordModal').classList.add('active');
+}
+
+function closeChangePasswordModal() {
+  document.getElementById('changePasswordModal').classList.remove('active');
+}
+
+// Close modal when clicking outside
+document.getElementById('changePasswordModal').addEventListener('click', function(e) {
+  if (e.target === this) {
+    closeChangePasswordModal();
+  }
+});
+</script>
 {% endblock %}

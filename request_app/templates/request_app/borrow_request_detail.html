@@ -1,0 +1,14 @@
+<div class="borrow-request-detail">
+  <h3>{{ br.item.name }} — Request</h3>
+  <p><strong>Borrower:</strong> {{ br.borrower.username }}</p>
+  <p><strong>Due date:</strong> {{ br.due_date }}</p>
+  <p><strong>Status:</strong> {{ br.status }}</p>
+  <p>{{ br.item.description }}</p>
+  <div style="margin-top:12px;display:flex;gap:8px;justify-content:flex-end;">
+    {% if br.status == 'Pending' and br.item.owner_id == user.id %}
+      <button class="dashboard-btn green small approve-request" data-request-id="{{ br.id }}" data-url="{% url 'request_app:approve_borrow_request_ajax' br.id %}">Approve</button>
+      <button class="dashboard-btn red small reject-request" data-request-id="{{ br.id }}" data-url="{% url 'request_app:reject_borrow_request_ajax' br.id %}">Reject</button>
+    {% endif %}
+    <a class="dashboard-btn outline small" href="{% url 'request_app:borrow_request_list' %}">Open Requests Page</a>
+  </div>
+</div>

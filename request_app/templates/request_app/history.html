@@ -2,86 +2,269 @@
 {% load static %}
 {% block title %}Requests History - BorrowingHub{% endblock %}
 {% block content %}
+<style>
+.history-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.history-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+.history-card-image {
+  width: 120px;
+  height: 120px;
+  border-radius: 8px;
+  object-fit: cover;
+  flex-shrink: 0;
+  background: #f1f5f9;
+}
+.history-card-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.history-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+.history-card-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0;
+}
+.history-card-category {
+  display: inline-block;
+  background: #e0f2fe;
+  color: #0369a1;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.history-card-description {
+  color: #64748b;
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0;
+}
+.history-card-meta {
+  display: flex;
+  gap: 16px;
+  font-size: 13px;
+  color: #475569;
+  margin-top: auto;
+}
+.history-card-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.history-status-badge {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.status-pending {
+  background: #fef3c7;
+  color: #92400e;
+}
+.status-approved {
+  background: #d1fae5;
+  color: #065f46;
+}
+.status-rejected {
+  background: #fee2e2;
+  color: #991b1b;
+}
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 24px 0 16px 0;
+}
+.section-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0;
+}
+.section-count {
+  background: #e2e8f0;
+  color: #475569;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.empty-state {
+  text-align: center;
+  padding: 48px 24px;
+  background: #f8fafc;
+  border-radius: 12px;
+  color: #64748b;
+}
+</style>
+
 <div class="dashboard-container">
   <div class="dashboard-page-header">
     <div>
       <h1 class="page-title">Requests History</h1>
       <p class="page-subtitle">All your borrow requests and incoming requests for your items.</p>
     </div>
-      <!-- Removed Back to Dashboard button per request -->
   </div>
 
-  <div style="display:flex;gap:20px;align-items:flex-start;">
-    <div style="flex:1">
-      <h3>Incoming Requests</h3>
-      {% if incoming %}
-        <div style="display:flex;flex-direction:column;gap:12px;">
-          {% for br in incoming %}
-            <div class="item-card">
-              <div style="padding:12px;display:flex;justify-content:space-between;align-items:center;">
-                <div>
-                  <div style="font-weight:700">{{ br.item.name }}</div>
-                  <div style="color:#64748b">Requested by {{ br.borrower.username }}</div>
-                  <div style="color:#475569">Due: {{ br.due_date }}</div>
-                </div>
-                <div>
-                  <span class="item-status-pill {% if br.status == 'Approved' %}status-borrowed{% elif br.status == 'Pending' %}status-available{% else %}status-borrowed{% endif %}">{{ br.status }}</span>
-                </div>
-              </div>
-            </div>
-          {% endfor %}
-        </div>
-      {% else %}
-        <p>No incoming requests.</p>
-      {% endif %}
-    </div>
-
-    <div style="width:360px;">
-      <h3>My Requests</h3>
-      <div style="background:#fff;border-radius:12px;padding:12px;box-shadow:0 2px 8px #0001;">
-        {% if mine %}
-          <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;">
-            {% for br in mine %}
-              <li style="display:flex;justify-content:space-between;align-items:center;">
-                <div>
-                  <div style="font-weight:700">{{ br.item.name }}</div>
-                  <div style="color:#64748b">Owner: {{ br.item.owner.username }}</div>
-                </div>
-                <div>
-                  <span class="item-status-pill {% if br.status == 'Approved' %}status-borrowed{% elif br.status == 'Pending' %}status-available{% else %}status-borrowed{% endif %}">{{ br.status }}</span>
-                </div>
-              </li>
-            {% endfor %}
-          </ul>
-        {% else %}
-          <p>You have not made any requests.</p>
-        {% endif %}
-      </div>
-    </div>
-    {% if records %}
-      <div style="margin-top:18px;">
-        <h3>Action Records</h3>
-        <div style="background:#fff;border-radius:12px;padding:12px;box-shadow:0 2px 8px #0001;">
-          <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;">
-            {% for rec in records %}
-              <li style="display:flex;justify-content:space-between;align-items:center;">
-                <div>
-                  <div style="font-weight:700">{{ rec.borrow_request.item.name }} — {{ rec.action }}</div>
-                  <div style="color:#64748b">By:
-                    {% if rec.performed_by %}
-                      {{ rec.performed_by.username }}
-                    {% else %}
-                      System
-                    {% endif %}
-                  </div>
-                </div>
-                <div style="color:#475569">{{ rec.performed_at }}</div>
-              </li>
-            {% endfor %}
-          </ul>
-        </div>
-      </div>
+  <!-- Incoming Requests Section -->
+  <div class="section-header">
+    <h2 class="section-title">Incoming Requests</h2>
+    {% if incoming %}
+      <span class="section-count">{{ incoming|length }}</span>
     {% endif %}
   </div>
+  
+  {% if incoming %}
+    {% for br in incoming %}
+      <div class="history-card">
+        {% if br.item.image_url %}
+          <img src="{{ br.item.image_url }}" alt="{{ br.item.name }}" class="history-card-image">
+        {% else %}
+          <div class="history-card-image" style="display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:14px;">
+            No Image
+          </div>
+        {% endif %}
+        
+        <div class="history-card-content">
+          <div class="history-card-header">
+            <div>
+              <h3 class="history-card-title">{{ br.item.name }}</h3>
+              {% if br.item.category %}
+                <span class="history-card-category">{{ br.item.category }}</span>
+              {% endif %}
+            </div>
+            <span class="history-status-badge {% if br.status == 'Approved' %}status-approved{% elif br.status == 'Pending' %}status-pending{% else %}status-rejected{% endif %}">
+              {{ br.status }}
+            </span>
+          </div>
+          
+          {% if br.item.description %}
+            <p class="history-card-description">{{ br.item.description|truncatewords:20 }}</p>
+          {% endif %}
+          
+          <div class="history-card-meta">
+            <div class="history-card-meta-item">
+              <strong>Requested by:</strong> {{ br.borrower.username }}
+            </div>
+            <div class="history-card-meta-item">
+              <strong>Due Date:</strong> {{ br.due_date|date:"M d, Y" }}
+            </div>
+            <div class="history-card-meta-item">
+              <strong>Requested:</strong> {{ br.request_date|date:"M d, Y" }}
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  {% else %}
+    <div class="empty-state">
+      <p style="margin:0;font-size:16px;">No incoming requests yet.</p>
+    </div>
+  {% endif %}
+
+  <!-- My Requests Section -->
+  <div class="section-header">
+    <h2 class="section-title">My Requests</h2>
+    {% if mine %}
+      <span class="section-count">{{ mine|length }}</span>
+    {% endif %}
+  </div>
+  
+  {% if mine %}
+    {% for br in mine %}
+      <div class="history-card">
+        {% if br.item.image_url %}
+          <img src="{{ br.item.image_url }}" alt="{{ br.item.name }}" class="history-card-image">
+        {% else %}
+          <div class="history-card-image" style="display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:14px;">
+            No Image
+          </div>
+        {% endif %}
+        
+        <div class="history-card-content">
+          <div class="history-card-header">
+            <div>
+              <h3 class="history-card-title">{{ br.item.name }}</h3>
+              {% if br.item.category %}
+                <span class="history-card-category">{{ br.item.category }}</span>
+              {% endif %}
+            </div>
+            <span class="history-status-badge {% if br.status == 'Approved' %}status-approved{% elif br.status == 'Pending' %}status-pending{% else %}status-rejected{% endif %}">
+              {{ br.status }}
+            </span>
+          </div>
+          
+          {% if br.item.description %}
+            <p class="history-card-description">{{ br.item.description|truncatewords:20 }}</p>
+          {% endif %}
+          
+          <div class="history-card-meta">
+            <div class="history-card-meta-item">
+              <strong>Owner:</strong> {{ br.item.owner.username }}
+            </div>
+            <div class="history-card-meta-item">
+              <strong>Due Date:</strong> {{ br.due_date|date:"M d, Y" }}
+            </div>
+            <div class="history-card-meta-item">
+              <strong>Requested:</strong> {{ br.request_date|date:"M d, Y" }}
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  {% else %}
+    <div class="empty-state">
+      <p style="margin:0;font-size:16px;">You haven't made any borrow requests yet.</p>
+    </div>
+  {% endif %}
+
+  <!-- Action Records Section -->
+  {% if records %}
+    <div class="section-header">
+      <h2 class="section-title">Action Records</h2>
+      <span class="section-count">{{ records|length }}</span>
+    </div>
+    
+    <div style="background:#fff;border-radius:12px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        {% for rec in records %}
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:12px;background:#f8fafc;border-radius:8px;">
+            <div>
+              <div style="font-weight:700;color:#1e293b;">{{ rec.borrow_request.item.name }}</div>
+              <div style="color:#64748b;font-size:14px;margin-top:4px;">
+                <strong>{{ rec.action }}</strong> by 
+                {% if rec.performed_by %}
+                  {{ rec.performed_by.username }}
+                {% else %}
+                  System
+                {% endif %}
+              </div>
+            </div>
+            <div style="color:#64748b;font-size:13px;">{{ rec.performed_at|date:"M d, Y g:i A" }}</div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
 </div>
 {% endblock %}

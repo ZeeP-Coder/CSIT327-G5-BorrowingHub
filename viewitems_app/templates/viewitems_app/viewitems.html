@@ -70,49 +70,276 @@
     {% endif %}
 </div>
 
-<!-- EDIT MODAL (self-contained) -->
+<!-- EDIT MODAL (redesigned) -->
 <div id="editModal" class="modal">
-    <div class="modal-content">
-        <h3>Edit Item</h3>
+    <div class="modal-content-new">
+        <div class="modal-header-new">
+            <h3>Edit Item</h3>
+            <button type="button" class="close-btn" onclick="closeModal('editModal')">&times;</button>
+        </div>
+        
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <input type="hidden" name="action" value="edit">
             <input type="hidden" id="edit_item_id" name="item_id">
 
-            <label>Name:</label>
-            <input type="text" id="edit_name" name="name" required>
+            <div class="modal-body-new">
+                <div class="form-group-new">
+                    <label for="edit_name">Item Name *</label>
+                    <input type="text" id="edit_name" name="name" required>
+                </div>
 
-            <label>Description:</label>
-            <textarea id="edit_description" name="description"></textarea>
+                <div class="form-group-new">
+                    <label for="edit_description">Description</label>
+                    <textarea id="edit_description" name="description" rows="3"></textarea>
+                </div>
 
-            <label>Category:</label>
-            <div class="checkbox-group">
-                {% for val,label in CATEGORY_CHOICES %}
-                <label class="checkbox-option">
-                    <input type="checkbox" name="category" value="{{ val }}" class="edit-category-checkbox">
-                    {{ label }}
-                </label>
-                {% endfor %}
+                <div class="form-group-new">
+                    <label>Category *</label>
+                    <div class="category-grid-new">
+                        {% for val,label in CATEGORY_CHOICES %}
+                        <label class="category-option-new">
+                            <input type="checkbox" name="category" value="{{ val }}" class="edit-category-checkbox">
+                            <span>{{ label }}</span>
+                        </label>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="form-group-new">
+                    <label for="edit_quantity">Quantity Available *</label>
+                    <input type="number" id="edit_quantity" name="quantity" min="1">
+                </div>
+
+                <div class="form-group-new">
+                    <label for="edit_image_file">Update Image (optional)</label>
+                    <input type="file" id="edit_image_file" name="image_file" accept="image/*">
+                </div>
+
+                <div class="availability-toggle-new">
+                    <input type="checkbox" id="edit_available" name="is_available">
+                    <label for="edit_available">Available for borrowing</label>
+                </div>
             </div>
 
-            <label>Quantity:</label>
-            <input type="number" id="edit_quantity" name="quantity" min="1">
-
-            <label class="checkbox-label-inline">
-                <input type="checkbox" id="edit_available" name="is_available"> Available
-            </label>
-
-            <label>Image (optional):</label>
-            <input type="file" name="image_file" accept="image/*">
-
-
-            <div class="modal-actions">
-                <button type="button" class="modal-btn cancel" onclick="closeModal('editModal')">Cancel</button>
-                <button type="submit" class="modal-btn confirm">Save</button>
+            <div class="modal-footer-new">
+                <button type="button" class="btn-modal cancel" onclick="closeModal('editModal')">Cancel</button>
+                <button type="submit" class="btn-modal confirm">Save Changes</button>
             </div>
         </form>
     </div>
 </div>
+
+<style>
+    /* New Modal Styles */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        align-items: center;
+        justify-content: center;
+    }
+
+    .modal-content-new {
+        background: white;
+        border-radius: 12px;
+        width: 95%;
+        max-width: 1000px;
+        max-height: 85vh;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    .modal-header-new {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        color: white;
+        padding: 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .modal-header-new h3 {
+        margin: 0;
+        font-size: 1.5rem;
+        font-weight: 600;
+    }
+
+    .close-btn {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 2rem;
+        cursor: pointer;
+        line-height: 1;
+        padding: 0;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 4px;
+        transition: background 0.2s;
+    }
+
+    .close-btn:hover {
+        background: rgba(255, 255, 255, 0.2);
+    }
+
+    .modal-body-new {
+        padding: 2rem;
+        overflow-y: auto;
+        flex: 1;
+    }
+
+    .form-group-new {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-group-new label {
+        display: block;
+        font-weight: 600;
+        color: #1e293b;
+        margin-bottom: 0.5rem;
+        font-size: 0.95rem;
+    }
+
+    .form-group-new input[type="text"],
+    .form-group-new input[type="number"],
+    .form-group-new input[type="file"],
+    .form-group-new textarea {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        font-size: 0.95rem;
+        transition: all 0.2s;
+        font-family: inherit;
+        box-sizing: border-box;
+    }
+
+    .form-group-new input:focus,
+    .form-group-new textarea:focus {
+        outline: none;
+        border-color: #ef4444;
+        box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+    }
+
+    .form-group-new textarea {
+        resize: vertical;
+    }
+
+    .category-grid-new {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 0.625rem;
+        padding: 1rem;
+        background: #f8fafc;
+        border-radius: 8px;
+        border: 1px solid #e2e8f0;
+    }
+
+    .category-option-new {
+        display: flex;
+        align-items: center;
+        padding: 0.5rem;
+        background: white;
+        border: 1px solid #cbd5e1;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-size: 0.875rem;
+    }
+
+    .category-option-new:hover {
+        background: #fef2f2;
+        border-color: #ef4444;
+    }
+
+    .category-option-new input[type="checkbox"] {
+        margin: 0 0.5rem 0 0;
+        cursor: pointer;
+        width: 16px;
+        height: 16px;
+        accent-color: #ef4444;
+    }
+
+    .category-option-new input[type="checkbox"]:checked + span {
+        color: #dc2626;
+        font-weight: 600;
+    }
+
+    .availability-toggle-new {
+        display: flex;
+        align-items: center;
+        padding: 1rem;
+        background: #f8fafc;
+        border-radius: 8px;
+        border: 1px solid #e2e8f0;
+    }
+
+    .availability-toggle-new input[type="checkbox"] {
+        margin: 0 0.75rem 0 0;
+        cursor: pointer;
+        width: 20px;
+        height: 20px;
+        accent-color: #22c55e;
+    }
+
+    .availability-toggle-new label {
+        margin: 0;
+        cursor: pointer;
+        color: #475569;
+        font-weight: 500;
+    }
+
+    .modal-footer-new {
+        padding: 1.5rem;
+        border-top: 1px solid #e2e8f0;
+        display: flex;
+        gap: 1rem;
+        background: #f8fafc;
+    }
+
+    .btn-modal {
+        flex: 1;
+        padding: 0.875rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        cursor: pointer;
+        transition: all 0.2s;
+        border: none;
+    }
+
+    .btn-modal.cancel {
+        background: white;
+        color: #64748b;
+        border: 1px solid #cbd5e1;
+    }
+
+    .btn-modal.cancel:hover {
+        background: #f8fafc;
+        border-color: #94a3b8;
+    }
+
+    .btn-modal.confirm {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        color: white;
+    }
+
+    .btn-modal.confirm:hover {
+        background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+    }
+</style>
 
 <!-- DELETE MODAL -->
 <div id="deleteModal" class="modal">

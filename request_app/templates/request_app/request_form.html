@@ -1,0 +1,314 @@
+{% extends 'dashboard_app/base.html' %}
+{% load static %}
+{% block title %}Request Item - BorrowingHub{% endblock %}
+{% block content %}
+<style>
+.request-form-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+.request-page-header {
+  margin-bottom: 32px;
+}
+.request-page-header h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 8px 0;
+}
+.request-page-header p {
+  color: #64748b;
+  font-size: 15px;
+  margin: 0;
+}
+.item-details-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+.item-card-header {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+  padding: 20px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.item-card-header-left h2 {
+  margin: 0 0 6px 0;
+  font-size: 22px;
+  font-weight: 700;
+}
+.item-category-tag {
+  background: rgba(255,255,255,0.25);
+  padding: 4px 12px;
+  border-radius: 12px;
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 600;
+}
+.availability-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.availability-badge.available {
+  background: rgba(255,255,255,0.95);
+  color: #059669;
+}
+.availability-badge.unavailable {
+  background: rgba(255,255,255,0.95);
+  color: #dc2626;
+}
+.availability-badge::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.item-content-wrapper {
+  display: flex;
+  gap: 24px;
+  padding: 24px;
+}
+.item-image-section {
+  flex-shrink: 0;
+}
+.item-image-wrapper {
+  width: 240px;
+  height: 240px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  background: #f1f5f9;
+}
+.item-image-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.item-image-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #94a3b8;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+  padding: 20px;
+}
+.item-details-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.detail-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.detail-label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #64748b;
+}
+.detail-value {
+  font-size: 16px;
+  color: #1e293b;
+  font-weight: 600;
+}
+.detail-value.description {
+  font-weight: 400;
+  line-height: 1.6;
+  color: #475569;
+}
+.detail-divider {
+  height: 1px;
+  background: #e2e8f0;
+  margin: 8px 0;
+}
+.form-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  padding: 24px;
+  margin-bottom: 24px;
+}
+.form-card h3 {
+  margin: 0 0 20px 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: #1e293b;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #e2e8f0;
+}
+.form-group {
+  margin-bottom: 20px;
+}
+.form-group label {
+  display: block;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+.form-group input[type="date"] {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 15px;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+.form-group input[type="date"]:focus {
+  outline: none;
+  border-color: #ef4444;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+.form-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 24px;
+}
+.btn {
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+  display: inline-block;
+  border: none;
+}
+.btn-primary {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+}
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+}
+.btn-secondary {
+  background: #f1f5f9;
+  color: #475569;
+}
+.btn-secondary:hover {
+  background: #e2e8f0;
+}
+.error-message {
+  color: #dc2626;
+  margin-top: 6px;
+  font-size: 13px;
+}
+.help-text {
+  color: #64748b;
+  margin-top: 4px;
+  font-size: 13px;
+}
+</style>
+
+<div class="request-form-container">
+  <div class="request-page-header">
+    <h1>Request to Borrow</h1>
+    <p>Review the item details and set your preferred return date</p>
+  </div>
+
+  <!-- Item Details Card -->
+  <div class="item-details-card">
+    <div class="item-card-header">
+      <div class="item-card-header-left">
+        <h2>{{ item.name }}</h2>
+        {% if item.category %}
+          <span class="item-category-tag">{{ item.category }}</span>
+        {% endif %}
+      </div>
+      <div>
+        <span class="availability-badge {% if item.is_available %}available{% else %}unavailable{% endif %}">
+          {% if item.is_available %}Available{% else %}Not Available{% endif %}
+        </span>
+      </div>
+    </div>
+
+    <div class="item-content-wrapper">
+      <div class="item-image-section">
+        <div class="item-image-wrapper">
+          {% if item.image_url %}
+            <img src="{{ item.image_url }}" alt="{{ item.name }}">
+          {% else %}
+            <div class="item-image-placeholder">
+              <span>No Image<br>Available</span>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="item-details-section">
+        <div class="detail-row">
+          <span class="detail-label">Owner</span>
+          <span class="detail-value">{{ item.owner.username }}</span>
+        </div>
+
+        <div class="detail-divider"></div>
+
+        <div class="detail-row">
+          <span class="detail-label">Quantity Available</span>
+          <span class="detail-value">{{ item.quantity }}</span>
+        </div>
+
+        <div class="detail-divider"></div>
+
+        {% if item.description %}
+        <div class="detail-row">
+          <span class="detail-label">Description</span>
+          <span class="detail-value description">{{ item.description }}</span>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Request Form -->
+  <div class="form-card">
+    <h3>Set Your Return Date</h3>
+    
+    <form method="post">
+      {% csrf_token %}
+      
+      <div class="form-group">
+        {{ form.due_date.label_tag }}
+        {{ form.due_date }}
+        {% if form.due_date.help_text %}
+          <div class="help-text">{{ form.due_date.help_text }}</div>
+        {% endif %}
+        {% if form.due_date.errors %}
+          <div class="error-message">
+            {{ form.due_date.errors }}
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="form-actions">
+        <a href="{% url 'dashboard_app:dashboard' %}" class="btn btn-secondary">Cancel</a>
+        <button type="submit" class="btn btn-primary">Send Request</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+

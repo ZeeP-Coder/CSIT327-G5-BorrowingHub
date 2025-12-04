@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from django.contrib import messages
 from django.utils import timezone
 from datetime import timedelta
-from dashboard_app.models import BorrowRequest
+from request_app.models import BorrowRequest
 from registration_app.models import TblUser
 from django.http import JsonResponse
 

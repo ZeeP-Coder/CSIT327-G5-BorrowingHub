@@ -104,8 +104,8 @@
                                 <div class="request-meta">by <strong>{{ br.borrower.username }}</strong> — due: {{ br.due_date }}</div>
                             </div>
                             <div class="request-actions">
-                                <button class="dashboard-btn green small approve-request" data-request-id="{{ br.id }}" data-url="{% url 'dashboard_app:approve_borrow_request_ajax' br.id %}">Approve</button>
-                                <button class="dashboard-btn red small reject-request" data-request-id="{{ br.id }}" data-url="{% url 'dashboard_app:reject_borrow_request_ajax' br.id %}">Reject</button>
+                                <button class="dashboard-btn green small approve-request" data-request-id="{{ br.id }}" data-url="{% url 'request_app:approve_borrow_request_ajax' br.id %}">Approve</button>
+                                <button class="dashboard-btn red small reject-request" data-request-id="{{ br.id }}" data-url="{% url 'request_app:reject_borrow_request_ajax' br.id %}">Reject</button>
                             </div>
                         </div>
                     {% endfor %}
@@ -155,7 +155,7 @@
                                     <!-- Placeholder for future actions like Request to Borrow -->
                                         <div class="item-card-footer-right">
                                         {% if item.is_available %}
-                                        <a href="{% url 'dashboard_app:borrow_request_create' item.id %}" class="dashboard-btn outline small">Request</a>
+                                        <a href="{% url 'request_app:borrow_request_create' item.id %}" class="dashboard-btn outline small">Request</a>
                                         {% else %}
                                             <span class="dashboard-badge red">Not Available</span>
                                         {% endif %}

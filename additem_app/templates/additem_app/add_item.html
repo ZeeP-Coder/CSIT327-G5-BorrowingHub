@@ -1,45 +1,299 @@
 {% extends 'dashboard_app/base.html' %}
 {% block title %}Add New Item - BorrowingHub{% endblock %}
-{% load static %}
-{% block extra_css %}
-    <link rel="stylesheet" href="{% static 'additem_app/additem.css' %}">
-{% endblock %}
+
+{% block nav_additem_active %}active{% endblock %}
+
 {% block content %}
-   <main class="additem-wrapper">
-    <div class="additem-card">
-        <h2>Add New Item</h2>
-        <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name" placeholder="Enter item name" required>
+<style>
+    .add-item-page {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: calc(100vh - 200px);
+        padding: 2rem;
+    }
 
-            <label for="description">Description:</label>
-            <textarea id="description" name="description" placeholder="Describe the item"></textarea>
+    .add-item-modal {
+        background: white;
+        border-radius: 12px;
+        width: 95%;
+        max-width: 1000px;
+        max-height: 85vh;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    }
 
-            <label>Category:</label>
-                <div class="category-checklist" style="margin-bottom: 1em;">
-                    {% for value, label in form.category.field.choices %}
-                    <label style="display:block; margin-bottom:4px;">
-                        <input type="checkbox" name="category" value="{{ value }}">
-                        {{ label }}
-                    </label>
-                {% endfor %}
-            </div>
+    .add-item-modal-header {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        color: white;
+        padding: 1.5rem;
+        border-radius: 12px 12px 0 0;
+        flex-shrink: 0;
+    }
 
-            <label>Upload Image:</label>
-            <input type="file" name="image_file" accept="image/*">
+    .add-item-modal-header h2 {
+        margin: 0;
+        font-size: 1.5rem;
+        font-weight: 600;
+    }
 
-            <label for="quantity">Quantity:</label>
-            <input type="number" id="quantity" name="quantity" min="1" value="1">
+    .add-item-modal-header p {
+        margin: 0.5rem 0 0 0;
+        opacity: 0.95;
+        font-size: 0.875rem;
+    }
 
-            <label class="checkbox-label">
-                <input type="checkbox" id="is_available" name="is_available" checked>
-                <span>Available for Borrow</span>
-            </label>
+    .add-item-modal-body {
+        padding: 2rem;
+        overflow-y: auto;
+        flex: 1;
+    }
 
-            <button type="submit" class="save-btn">Save Item</button>
-        </form>
-        <a href="{% url 'dashboard_app:dashboard' %}" class="back-link">← Back to Dashboard</a>
+    .messages {
+        margin-bottom: 1.5rem;
+    }
+
+    .message {
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+        border-left: 4px solid;
+    }
+
+    .message.success {
+        background-color: #dcfce7;
+        border-color: #22c55e;
+        color: #166534;
+    }
+
+    .message.error {
+        background-color: #fee2e2;
+        border-color: #ef4444;
+        color: #991b1b;
+    }
+
+    .form-group-add {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-group-add label {
+        display: block;
+        font-weight: 600;
+        color: #1e293b;
+        margin-bottom: 0.5rem;
+        font-size: 0.95rem;
+    }
+
+    .form-group-add input[type="text"],
+    .form-group-add input[type="number"],
+    .form-group-add input[type="file"],
+    .form-group-add textarea {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        font-size: 0.95rem;
+        transition: all 0.2s;
+        font-family: inherit;
+        box-sizing: border-box;
+    }
+
+    .form-group-add input:focus,
+    .form-group-add textarea:focus {
+        outline: none;
+        border-color: #ef4444;
+        box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+    }
+
+    .form-group-add textarea {
+        resize: vertical;
+        min-height: 80px;
+    }
+
+    .category-grid-add {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 0.625rem;
+        padding: 1rem;
+        background: #f8fafc;
+        border-radius: 8px;
+        border: 1px solid #e2e8f0;
+    }
+
+    .category-option-add {
+        display: flex;
+        align-items: center;
+        padding: 0.5rem;
+        background: white;
+        border: 1px solid #cbd5e1;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-size: 0.875rem;
+    }
+
+    .category-option-add:hover {
+        background: #fef2f2;
+        border-color: #ef4444;
+    }
+
+    .category-option-add input[type="checkbox"] {
+        margin: 0 0.5rem 0 0;
+        cursor: pointer;
+        width: 16px;
+        height: 16px;
+        accent-color: #ef4444;
+    }
+
+    .category-option-add input[type="checkbox"]:checked + span {
+        color: #dc2626;
+        font-weight: 600;
+    }
+
+    .availability-toggle-add {
+        display: flex;
+        align-items: center;
+        padding: 1rem;
+        background: #f8fafc;
+        border-radius: 8px;
+        border: 1px solid #e2e8f0;
+    }
+
+    .availability-toggle-add input[type="checkbox"] {
+        margin: 0 0.75rem 0 0;
+        cursor: pointer;
+        width: 20px;
+        height: 20px;
+        accent-color: #22c55e;
+    }
+
+    .availability-toggle-add label {
+        margin: 0;
+        cursor: pointer;
+        color: #475569;
+        font-weight: 500;
+    }
+
+    .add-item-modal-footer {
+        padding: 1.5rem;
+        border-top: 1px solid #e2e8f0;
+        display: flex;
+        gap: 1rem;
+        background: #f8fafc;
+        border-radius: 0 0 12px 12px;
+        flex-shrink: 0;
+    }
+
+    .btn-add {
+        flex: 1;
+        padding: 0.875rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        cursor: pointer;
+        transition: all 0.2s;
+        border: none;
+        text-decoration: none;
+        display: inline-block;
+        text-align: center;
+    }
+
+    .btn-add.cancel {
+        background: white;
+        color: #64748b;
+        border: 1px solid #cbd5e1;
+    }
+
+    .btn-add.cancel:hover {
+        background: #f8fafc;
+        border-color: #94a3b8;
+    }
+
+    .btn-add.confirm {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        color: white;
+    }
+
+    .btn-add.confirm:hover {
+        background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+    }
+
+    @media (max-width: 768px) {
+        .add-item-page {
+            padding: 1rem;
+        }
+
+        .category-grid-add {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<div class="add-item-page">
+    <div class="add-item-modal">
+        <div class="add-item-modal-header">
+            <h2>Add New Item</h2>
+            <p>List your item to share with the BorrowingHub community</p>
+        </div>
+
+        <div class="add-item-modal-body">
+            {% if messages %}
+                <div class="messages">
+                    {% for message in messages %}
+                        <div class="message {{ message.tags }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <form method="post" enctype="multipart/form-data" id="addItemForm">
+                {% csrf_token %}
+                
+                <div class="form-group-add">
+                    <label for="name">Item Name *</label>
+                    <input type="text" id="name" name="name" placeholder="Enter item name" required>
+                </div>
+
+                <div class="form-group-add">
+                    <label for="description">Description</label>
+                    <textarea id="description" name="description" placeholder="Describe the item"></textarea>
+                </div>
+
+                <div class="form-group-add">
+                    <label>Category (select one or more) *</label>
+                    <div class="category-grid-add">
+                        {% for value, label in form.category.field.choices %}
+                            <label class="category-option-add">
+                                <input type="checkbox" name="category" value="{{ value }}">
+                                <span>{{ label }}</span>
+                            </label>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="form-group-add">
+                    <label for="quantity">Quantity Available *</label>
+                    <input type="number" id="quantity" name="quantity" min="1" value="1">
+                </div>
+
+                <div class="form-group-add">
+                    <label for="image_file">Item Image (optional)</label>
+                    <input type="file" id="image_file" name="image_file" accept="image/*">
+                </div>
+
+                <div class="availability-toggle-add">
+                    <input type="checkbox" id="is_available" name="is_available" checked>
+                    <label for="is_available">Available for borrowing</label>
+                </div>
+            </form>
+        </div>
+
+        <div class="add-item-modal-footer">
+            <a href="{% url 'viewitems_app:view_items' %}" class="btn-add cancel">Cancel</a>
+            <button type="submit" form="addItemForm" class="btn-add confirm">Add Item</button>
+        </div>
     </div>
-</main>
+</div>
 {% endblock %}
