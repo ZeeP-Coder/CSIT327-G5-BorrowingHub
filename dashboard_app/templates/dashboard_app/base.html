@@ -19,13 +19,13 @@
 
         <!-- Sidebar -->
         <aside class="dashboard-sidebar">
-            <div class="sidebar-header">
+            <a href="{% url 'dashboard_app:dashboard' %}" class="sidebar-header" style="text-decoration: none; color: inherit; cursor: pointer;">
                 <div class="sidebar-logo-circle">BH</div>
                 <div class="sidebar-title-group">
                     <span class="sidebar-app-name">BorrowingHub</span>
                     <span class="sidebar-app-tagline">Track Your Borrowed Items</span>
                 </div>
-            </div>
+            </a>
 
             <nav class="sidebar-nav">
                 <a class="sidebar-nav-item {% block nav_browse_active %}{% endblock %}" href="{% url 'dashboard_app:dashboard' %}">
