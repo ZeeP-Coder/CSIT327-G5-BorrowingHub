@@ -13,20 +13,21 @@
 <body class="register-body">
     
   <!-- Header -->
-  <header class="register-header-bar">
-    <div class="register-header-content">
-      <div style="display:flex; align-items:center; gap:10px;">
-        <span class="register-header-logo">BH</span>
-        <span class="register-header-title">Borrowing Hub</span>
+  <header class="register-header">
+    <nav class="register-nav">
+      <a href="{% url 'landing_app:landing' %}" class="register-brand" style="text-decoration: none; color: inherit;">
+        <span class="register-logo">BH</span>
+        <div class="register-title-group">
+          <span class="register-brand-title">Borrowing Hub</span>
+          <span class="register-subtitle-text">Track your borrowed items</span>
+        </div>
+      </a>
+      <div class="register-nav-actions">
+        <a href="{% url 'login_app:login' %}" class="register-login-btn">Login</a>
+        <a href="{% url 'registration_app:register' %}" class="register-register-btn">Register</a>
       </div>
-      <nav class="register-header-nav">
-        <a href="{% url 'login_app:login' %}" class="register-header-link">Login</a>
-        <a href="{% url 'registration_app:register' %}" class="register-header-link register-header-link-active">Register</a>
-      </nav>
-    </div>
+    </nav>
   </header>
-
-        <a href="{% url 'landing_app:landing' %}" class="register-back-btn">← Go back to landing page</a>
 
   <!-- Main container -->
   <main class="register-main-container">
@@ -34,8 +35,8 @@
 
 
       <!-- Logo and title -->
-      <div class="register-header">
-        <span class="register-logo">BH</span>
+      <div class="register-card-header">
+        <span class="register-card-logo">BH</span>
         <span class="register-title">Borrowing Hub</span>
       </div>
 

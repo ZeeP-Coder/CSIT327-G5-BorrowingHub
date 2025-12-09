@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.http import JsonResponse, HttpResponseForbidden
+from django.core.paginator import Paginator
 from registration_app.models import TblUser
 from dashboard_app.models import Item
 from request_app.models import BorrowRequest
@@ -117,9 +118,15 @@ def dashboard_view(request):
         elif status_filter == 'Borrowed':
             items = items.filter(is_available=False)
 
+    # Pagination - 20 items per page
+    paginator = Paginator(items, 20)
+    page_number = request.GET.get('page', 1)
+    page_obj = paginator.get_page(page_number)
+
     context = {
         'user': user,
-        'items': items,
+        'items': page_obj,
+        'page_obj': page_obj,
         'total_items': Item.objects.count(),
         'available_items': Item.objects.filter(is_available=True).count(),
         'borrowed_items': Item.objects.filter(is_available=False).count(),

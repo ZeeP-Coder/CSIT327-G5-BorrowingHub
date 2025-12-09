@@ -1,11 +1,17 @@
-/* Header bar */ 
-.register-header-bar { width: 100%; background: #fff; box-shadow: 0 2px 12px #0001; padding: 0; margin-bottom: 0; position: sticky; top: 0; z-index: 10; } 
-.register-header-content { max-width: 1120px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; padding: 18px 24px; } 
-.register-header-logo { width: 38px; height: 38px; border-radius: 10px; background: #ef4444; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.1rem; margin-right: 10px; } 
-.register-header-title { font-size: 1.1rem; font-weight: 700; margin-right: auto; margin-left: 8px; } 
-.register-header-nav { display: flex; gap: 10px; } 
-.register-header-link { color: #ef4444; text-decoration: none; font-weight: 700; padding: 8px 16px; border-radius: 8px; font-size: 1rem; transition: background 0.2s; } 
-.register-header-link-active, .register-header-link:hover { background: #fee2e2; } 
+/* Header / Navbar */
+.register-header { background-color: white; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); padding: 0; position: sticky; top: 0; z-index: 10; }
+.register-nav { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: auto; padding: 1rem 5%; }
+.register-brand { display: flex; align-items: center; gap: 12px; cursor: pointer; transition: opacity 0.2s ease; }
+.register-brand:hover { opacity: 0.8; }
+.register-logo { display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; background-color: #e63946; color: white; font-weight: 700; font-size: 1.2rem; border-radius: 12px; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); }
+.register-title-group { display: flex; flex-direction: column; line-height: 1.2; }
+.register-brand-title { font-weight: 700; font-size: 1.1rem; }
+.register-subtitle-text { font-size: 0.9rem; color: #6b7280; }
+.register-nav-actions { display: flex; gap: 0; }
+.register-login-btn { color: #e63946; font-weight: 600; margin-left: 1rem; text-decoration: none; transition: background 0.2s; padding: 0.5rem 1rem; border-radius: 6px; }
+.register-login-btn:hover { background: #fee2e2; }
+.register-register-btn { background-color: #e63946; color: white; padding: 0.5rem 1rem; border-radius: 6px; font-weight: 600; margin-left: 1rem; text-decoration: none; transition: background 0.2s; }
+.register-register-btn:hover { background-color: #c92a37; } 
 
 /* Back link */ 
 .register-back-link { display: inline-flex; align-items: center; gap: 6px; margin: 20px 0 0 24px; color: #ef4444; text-decoration: none; font-weight: 600; font-size: 1rem; border: 1.5px solid #fee2e2; background: #fff; padding: 0.6rem 1.2rem; border-radius: 10px; box-shadow: 0 2px 6px rgba(239,68,68,0.08); transition: all 0.25s ease; } 
@@ -22,8 +28,8 @@
 .register-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.1); } 
 
 /* Header inside card */ 
-.register-header { display: flex; align-items: center; justify-content: center; gap: 14px; margin-bottom: 8px; } 
-.register-logo { width: 38px; height: 38px; border-radius: 10px; background: #ef4444; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.1rem; } 
+.register-card-header { display: flex; align-items: center; justify-content: center; gap: 14px; margin-bottom: 8px; } 
+.register-card-logo { width: 38px; height: 38px; border-radius: 10px; background: #ef4444; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.1rem; } 
 .register-title { font-size: 1.1rem; font-weight: 700; } 
 .register-subtitle { color: #64748b; font-size: 1.05rem; margin-bottom: 18px; } 
 
@@ -37,9 +43,53 @@
 .register-form { width: 100%; display: flex; flex-direction: column; gap: 16px; } 
 .register-form-group { display: flex; flex-direction: column; gap: 6px; text-align: left; } 
 .register-label { font-weight: 600; color: #0f172a; font-size: 1rem; margin-bottom: 2px; } 
-.register-form-group input { padding: 12px 14px; border: 1.5px solid #e5e7eb; border-radius: 8px; font-size: 1rem; font-family: inherit; transition: border-color 0.2s; } 
+.register-form-group input { padding: 12px 14px; border: 1.5px solid #e5e7eb; border-radius: 8px; font-size: 1rem; font-family: inherit; transition: border-color 0.2s; width: 100%; box-sizing: border-box; } 
 .register-form-group input:focus { outline: none; border-color: #ef4444; box-shadow: 0 0 0 3px #fee2e2; } 
 .register-error-input { border-color: #e63946; background-color: #ffe5e5; } 
+
+/* Password input wrapper with eye toggle */
+.input-with-eye {
+  position: relative;
+  display: block;
+  width: 100%;
+}
+
+.input-with-eye input {
+  padding: 12px 60px 12px 14px !important;
+  width: 100%;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.input-with-eye input:focus {
+  outline: none;
+  border-color: #ef4444;
+  box-shadow: 0 0 0 3px #fee2e2;
+}
+
+.eye-toggle {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #ef4444;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: all 0.2s;
+  pointer-events: auto;
+}
+
+.eye-toggle:hover {
+  background: #fee2e2;
+} 
 
 /* Button */ 
 .register-btn { background: #ef4444; color: #fff; border: none; padding: 12px 0; border-radius: 8px; font-weight: 700; font-size: 1.08rem; margin-top: 6px; cursor: pointer; transition: all 0.2s; box-shadow: 0 3px 8px rgba(239,68,68,0.25); } 

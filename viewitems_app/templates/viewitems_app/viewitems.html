@@ -12,9 +12,9 @@
 <div class="viewitems-container">
 
     {% if messages %}
-        <div class="messages">
+        <div class="dashboard-messages">
             {% for message in messages %}
-                <div class="message {{ message.tags }}">{{ message }}</div>
+                <div class="dashboard-alert dashboard-alert-{{ message.tags }}">{{ message }}</div>
             {% endfor %}
         </div>
     {% endif %}
@@ -22,57 +22,46 @@
     {% if items %}
     <div class="item-list">
         {% for item in items %}
-        <!-- ========================= -->
-        <!-- NEW CARD UI START -->
-        <!-- ========================= -->
-        <div class="new-card-style">
+        <div class="item-card">
             <!-- IMAGE -->
-            <div class="new-card-image-wrapper">
+            <div class="item-card-image-wrapper">
                 {% if item.image_url %}
                     <img src="{{ item.image_url }}" alt="{{ item.name }}">
                 {% else %}
-                    <div class="new-card-placeholder">No Image</div>
+                    <div class="item-placeholder">No Image</div>
                 {% endif %}
+                <span class="item-status-pill {% if item.is_available %}status-available{% else %}status-borrowed{% endif %}">
+                    {% if item.is_available %}Available{% else %}Borrowed{% endif %}
+                </span>
             </div>
 
             <!-- BODY -->
-            <div class="new-card-body">
-                <h3 class="new-card-title">{{ item.name }}</h3>
-                <p class="new-card-desc">{{ item.description|default:"No description" }}</p>
-
-                <div class="new-card-meta">
-                    <p><strong>Category:</strong> {{ item.category }}</p>
-                    <p><strong>Quantity:</strong> {{ item.quantity }}</p>
-                    <p><strong>Status:</strong>
-                        {% if item.is_available %}
-                            <span class="available">Available</span>
-                        {% else %}
-                            <span class="borrowed">Borrowed</span>
-                        {% endif %}
-                    </p>
+            <div class="item-card-body">
+                <div class="item-card-meta">
+                    <span class="item-category-pill">{{ item.category }}</span>
                 </div>
-
-                <!-- ACTION BUTTONS -->
-                <div class="new-card-actions">
-                    <button class="dashboard-btn outline small"
-                        data-id="{{ item.id }}"
-                        data-name="{{ item.name|escapejs }}"
-                        data-desc="{{ item.description|escapejs }}"
-                        data-category="{{ item.category|default:''|escapejs }}"
-                        data-qty="{{ item.quantity }}"
-                        data-available="{{ item.is_available }}"
-                        onclick="openEditModalFromButton(this)">Edit</button>
-
-                    <button class="dashboard-btn red small"
-                        data-id="{{ item.id }}"
-                        data-name="{{ item.name|escapejs }}"
-                        onclick="openDeleteModalFromButton(this)">Delete</button>
+                <h4 class="item-title">{{ item.name }}</h4>
+                <p class="item-quantity"><strong>Quantity:</strong> {{ item.quantity }}</p>
+                <p class="item-desc">{{ item.description|default:"No description"|truncatechars:100 }}</p>
+                
+                <div class="item-card-footer">
+                    <div class="item-card-footer-right" style="margin-left: auto;">
+                        <button class="dashboard-btn outline small"
+                            data-id="{{ item.id }}"
+                            data-name="{{ item.name|escapejs }}"
+                            data-desc="{{ item.description|escapejs }}"
+                            data-category="{{ item.category|default:''|escapejs }}"
+                            data-qty="{{ item.quantity }}"
+                            data-available="{{ item.is_available }}"
+                            onclick="openEditModalFromButton(this)">Edit</button>
+                        <button class="dashboard-btn red small"
+                            data-id="{{ item.id }}"
+                            data-name="{{ item.name|escapejs }}"
+                            onclick="openDeleteModalFromButton(this)">Delete</button>
+                    </div>
                 </div>
             </div>
         </div>
-        <!-- ========================= -->
-        <!-- NEW CARD UI END -->
-        <!-- ========================= -->
         {% endfor %}
     </div>
 

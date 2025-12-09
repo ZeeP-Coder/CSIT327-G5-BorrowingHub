@@ -9,12 +9,8 @@
                         <h1 class="page-title">Browse Items</h1>
                         <p class="page-subtitle">Find and Borrow items</p>
                     </div>
-                    <div class="page-summary">
-                        <span class="summary-label">Showing</span>
-                        <span class="summary-value">{{ items|length }} items</span>
-                    </div>
                     <div class="page-actions">
-                        <button id="openRequestsModal" class="dashboard-btn">View Requests <span class="request-count">{{ pending_requests_count }}</span></button>
+                        <button id="openRequestsModal" class="dashboard-btn outline">View Requests <span class="request-count">{{ pending_requests_count }}</span></button>
                     </div>
                 </div>
 
@@ -82,7 +78,6 @@
                             <option {% if status_filter == 'Borrowed' %}selected{% endif %}>Borrowed</option>
                         </select>
                     </div>
-                    <button type="submit" class="dashboard-btn red small">Apply</button>
                 </form>
                 
 {# Requests modal will show pending requests; do not display inline on dashboard #}
@@ -91,27 +86,62 @@
 <div id="requestsModal" class="modal requests-modal" aria-hidden="true" style="display:none;">
     <div class="modal-inner">
         <header class="modal-header">
-            <h3>Pending Requests <span class="request-count">{{ pending_requests_count }}</span></h3>
-            <button id="closeRequestsModal" class="modal-close">×</button>
+            <div class="modal-header-content">
+                <h3>Pending Requests</h3>
+                <span class="pending-badge">{{ pending_requests_count }}</span>
+            </div>
+            <button id="closeRequestsModal" class="modal-close">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
         </header>
         <div class="modal-body">
             {% if borrow_requests and borrow_requests|length > 0 %}
                 <div class="requests-list">
                     {% for br in borrow_requests %}
-                        <div class="request-row">
-                            <div class="request-left">
-                                <div class="request-item-name">{{ br.item.name }}</div>
-                                <div class="request-meta">by <strong>{{ br.borrower.username }}</strong> — due: {{ br.due_date }}</div>
+                        <div class="request-card">
+                            <div class="request-card-left">
+                                {% if br.item.image_url %}
+                                    <img src="{{ br.item.image_url }}" alt="{{ br.item.name }}" class="request-item-image">
+                                {% else %}
+                                    <div class="request-item-placeholder">
+                                        <i class="fa-solid fa-box"></i>
+                                    </div>
+                                {% endif %}
                             </div>
-                            <div class="request-actions">
-                                <button class="dashboard-btn green small approve-request" data-request-id="{{ br.id }}" data-url="{% url 'request_app:approve_borrow_request_ajax' br.id %}">Approve</button>
-                                <button class="dashboard-btn red small reject-request" data-request-id="{{ br.id }}" data-url="{% url 'request_app:reject_borrow_request_ajax' br.id %}">Reject</button>
+                            <div class="request-card-body">
+                                <div class="request-item-header">
+                                    <h4 class="request-item-name">{{ br.item.name }}</h4>
+                                    <span class="request-category-badge">{{ br.item.category }}</span>
+                                </div>
+                                <div class="request-info">
+                                    <div class="request-info-item">
+                                        <i class="fa-solid fa-user"></i>
+                                        <span>Requested by: <strong>{{ br.borrower.username }}</strong></span>
+                                    </div>
+                                    <div class="request-info-item">
+                                        <i class="fa-solid fa-calendar"></i>
+                                        <span>Due: <strong>{{ br.due_date }}</strong></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="request-card-actions">
+                                <button class="request-action-btn approve approve-request" data-request-id="{{ br.id }}" data-url="{% url 'request_app:approve_borrow_request_ajax' br.id %}">
+                                    <i class="fa-solid fa-check"></i>
+                                    Approve
+                                </button>
+                                <button class="request-action-btn reject reject-request" data-request-id="{{ br.id }}" data-url="{% url 'request_app:reject_borrow_request_ajax' br.id %}">
+                                    <i class="fa-solid fa-xmark"></i>
+                                    Reject
+                                </button>
                             </div>
                         </div>
                     {% endfor %}
                 </div>
             {% else %}
-                <p class="muted">No pending requests.</p>
+                <div class="empty-requests">
+                    <i class="fa-solid fa-inbox"></i>
+                    <p>No pending requests at the moment</p>
+                </div>
             {% endif %}
         </div>
     </div>
@@ -139,33 +169,60 @@
                             </div>
                             <h4 class="item-title">{{ item.name }}</h4>
                             <p class="item-owner"><strong>Owner:</strong> {{ item.owner.username }}</p>
+                            <p class="item-quantity"><strong>Quantity:</strong> {{ item.quantity }}</p>
                             <p class="item-desc">{{ item.description|truncatechars:100 }}</p>
                             <div class="item-card-footer">
                                 <div class="item-card-footer-left">
                                     <span class="item-status-label">
                                         <strong>Status:</strong>
                                         {% if item.is_available %}
-                                            <span class="available">Available</span>
+                                        <span class="available">Available</span>
                                         {% else %}
-                                            <span class="borrowed">Borrowed</span>
+                                        <span class="borrowed">Borrowed</span>
                                         {% endif %}
                                     </span>
                                 </div>
                                 <div class="item-card-footer-right">
-                                    <!-- Placeholder for future actions like Request to Borrow -->
-                                        <div class="item-card-footer-right">
-                                        {% if item.is_available %}
-                                        <a href="{% url 'request_app:borrow_request_create' item.id %}" class="dashboard-btn outline small">Request</a>
-                                        {% else %}
-                                            <span class="dashboard-badge red">Not Available</span>
-                                        {% endif %}
-                                    </div>
+                                    {% if item.is_available %}
+                                    <a href="{% url 'request_app:borrow_request_create' item.id %}" class="dashboard-btn outline small">Request</a>
+                                    {% else %}
+                                    <span class="dashboard-badge red">Not Available</span>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
                     </div>
                     {% endfor %}
                 </div>
+
+                <!-- Pagination -->
+                {% if page_obj.paginator.num_pages > 1 %}
+                <div class="pagination-container">
+                    <div class="pagination-info">
+                        Showing {{ page_obj.start_index }} - {{ page_obj.end_index }} of {{ page_obj.paginator.count }} items
+                    </div>
+                    <div class="pagination">
+                        {% if page_obj.has_previous %}
+                            <a href="?page=1{% if search_query %}&search={{ search_query }}{% endif %}{% if category_filter %}&category={{ category_filter }}{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}" class="pagination-btn">First</a>
+                            <a href="?page={{ page_obj.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if category_filter %}&category={{ category_filter }}{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}" class="pagination-btn">Previous</a>
+                        {% endif %}
+
+                        {% for num in page_obj.paginator.page_range %}
+                            {% if page_obj.number == num %}
+                                <span class="pagination-btn active">{{ num }}</span>
+                            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                                <a href="?page={{ num }}{% if search_query %}&search={{ search_query }}{% endif %}{% if category_filter %}&category={{ category_filter }}{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}" class="pagination-btn">{{ num }}</a>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if page_obj.has_next %}
+                            <a href="?page={{ page_obj.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if category_filter %}&category={{ category_filter }}{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}" class="pagination-btn">Next</a>
+                            <a href="?page={{ page_obj.paginator.num_pages }}{% if search_query %}&search={{ search_query }}{% endif %}{% if category_filter %}&category={{ category_filter }}{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}" class="pagination-btn">Last</a>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endif %}
+
                 {% else %}
                 <div class="dashboard-empty-state">
                     <div class="empty-icon"><i class="fa-solid fa-box-archive"></i></div>

@@ -44,15 +44,23 @@
                     <i class="fa-solid fa-calendar-days"></i>
                     <span>Calendar</span>
                 </a>
-                <a class="sidebar-nav-item {% block nav_profile_active %}{% endblock %}" href="{% url 'dashboard_app:profile' %}">
-                    <i class="fa-solid fa-user"></i>
-                    <span>Profile</span>
+            </nav>
+
+            <div class="sidebar-footer">
+                <a class="sidebar-profile-card" href="{% url 'dashboard_app:profile' %}">
+                    <div class="sidebar-profile-avatar">
+                        {{ user.username|slice:":1"|upper }}
+                    </div>
+                    <div class="sidebar-profile-info">
+                        <div class="sidebar-profile-name">{{ user.username }}</div>
+                        <div class="sidebar-profile-email">{{ user.email }}</div>
+                    </div>
                 </a>
-                <a class="sidebar-nav-item" href="#" onclick="confirmLogout(event)">
+                <a class="sidebar-logout-btn" href="#" onclick="confirmLogout(event)">
                     <i class="fa-solid fa-arrow-right-from-bracket"></i>
                     <span>Logout</span>
                 </a>
-            </nav>
+            </div>
 
         </aside>
 

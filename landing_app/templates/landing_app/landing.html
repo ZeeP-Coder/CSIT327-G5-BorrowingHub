@@ -7,11 +7,11 @@
     {% load static %}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="{% static 'landing_app/landing.css' %}">
+    <link rel="stylesheet" href="{% static 'landing_app/landing.css' %}?v=3">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-
 </head>
 <body class="landing-body">
+    <!-- Header -->
     <header class="landing-header">
         <nav class="landing-nav">
             <div class="landing-brand">
@@ -28,34 +28,144 @@
         </nav>
     </header>
 
-    <main>
+    <!-- Hero Section -->
+    <main class="landing-main">
         <section class="landing-hero">
-            <h1 class="landing-hero-title">Borrow smarter. Track everything.</h1>
-            <p class="landing-hero-desc">
-                Keep tabs on books, tools, and gadgets you lend and borrow — all in one clean dashboard.
-            </p>
-            <div class="landing-hero-ctas">
-                <a href="{% url 'registration_app:register' %}" class="landing-hero-btn">Get Started Free</a>
-                <a href="{% url 'login_app:login' %}" class="landing-hero-link">I already have an account</a>
+            <div class="landing-hero-content">
+                <div class="landing-hero-badge">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                    </svg>
+                    Free to use forever
+                </div>
+                <h1 class="landing-hero-title">Borrow smarter.<br>Track everything.</h1>
+                <p class="landing-hero-desc">
+                    Never lose track of your borrowed items again. Manage books, tools, gadgets, and more with our intuitive dashboard.
+                </p>
+                <div class="landing-hero-ctas">
+                    <a href="{% url 'registration_app:register' %}" class="landing-hero-btn-primary">
+                        Get Started Free
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </a>
+                    <a href="{% url 'login_app:login' %}" class="landing-hero-btn-secondary">Sign In</a>
+                </div>
+                <div class="landing-hero-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">100%</div>
+                        <div class="stat-label">Free</div>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <div class="stat-number">Easy</div>
+                        <div class="stat-label">Setup</div>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <div class="stat-number">Secure</div>
+                        <div class="stat-label">Data</div>
+                    </div>
+                </div>
+            </div>
+            <div class="landing-hero-visual">
+                <div class="visual-card card-1">
+                    <div class="card-icon">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                        </svg>
+                    </div>
+                    <div class="card-title">Books</div>
+                    <div class="card-status available">Available</div>
+                </div>
+                <div class="visual-card card-2">
+                    <div class="card-icon">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+                        </svg>
+                    </div>
+                    <div class="card-title">Tools</div>
+                    <div class="card-status borrowed">Borrowed</div>
+                </div>
+                <div class="visual-card card-3">
+                    <div class="card-icon">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                            <line x1="8" y1="21" x2="16" y2="21"/>
+                            <line x1="12" y1="17" x2="12" y2="21"/>
+                        </svg>
+                    </div>
+                    <div class="card-title">Gadgets</div>
+                    <div class="card-status available">Available</div>
+                </div>
             </div>
         </section>
 
+        <!-- Features Section -->
         <section class="landing-features">
-            <div class="feature-card">
-                <h3>📘 Easy Tracking</h3>
-                <p>Track your borrowed and lent items in a clear, organized way.</p>
+            <div class="features-header">
+                <h2 class="features-title">Everything you need to manage your items</h2>
+                <p class="features-subtitle">Simple, powerful tools to track what matters</p>
             </div>
-            <div class="feature-card">
-                <h3>🚀 Fast Management</h3>
-                <p>Add, edit, and monitor items quickly with one click.</p>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/>
+                            <rect x="9" y="3" width="6" height="4" rx="1"/>
+                            <path d="M9 12h6"/>
+                            <path d="M9 16h6"/>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Easy Tracking</h3>
+                    <p class="feature-desc">Add and track items in seconds. Keep a clear record of what you've lent or borrowed.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="20" x2="12" y2="10"/>
+                            <line x1="18" y1="20" x2="18" y2="4"/>
+                            <line x1="6" y1="20" x2="6" y2="16"/>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Clean Dashboard</h3>
+                    <p class="feature-desc">View all your items at a glance with our intuitive, organized interface.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Secure & Private</h3>
+                    <p class="feature-desc">Your data is encrypted and protected. We never share your information.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Lightning Fast</h3>
+                    <p class="feature-desc">Quick search and filter features help you find what you need instantly.</p>
+                </div>
             </div>
-            <div class="feature-card">
-                <h3>📊 Clean Dashboard</h3>
-                <p>View everything at a glance with a simple, user-friendly dashboard.</p>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="landing-cta">
+            <div class="cta-content">
+                <h2 class="cta-title">Ready to get organized?</h2>
+                <p class="cta-desc">Join today and never lose track of your borrowed items again.</p>
+                <a href="{% url 'registration_app:register' %}" class="cta-btn">Create Free Account</a>
             </div>
         </section>
     </main>
 
+    <!-- Footer -->
     <footer class="landing-footer">
         <p>© 2025 BorrowingHub. All rights reserved.</p>
     </footer>
