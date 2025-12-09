@@ -169,7 +169,6 @@
                             </div>
                             <h4 class="item-title">{{ item.name }}</h4>
                             <p class="item-owner"><strong>Owner:</strong> {{ item.owner.username }}</p>
-                            <p class="item-quantity"><strong>Quantity:</strong> {{ item.quantity }}</p>
                             <p class="item-desc">{{ item.description|truncatechars:100 }}</p>
                             <div class="item-card-footer">
                                 <div class="item-card-footer-left">
@@ -183,11 +182,9 @@
                                     </span>
                                 </div>
                                 <div class="item-card-footer-right">
-                                    {% if item.is_available %}
-                                    <a href="{% url 'request_app:borrow_request_create' item.id %}" class="dashboard-btn outline small">Request</a>
-                                    {% else %}
-                                    <span class="dashboard-badge red">Not Available</span>
-                                    {% endif %}
+                                    <a href="{% url 'item_app:item_detail' item.id %}" class="dashboard-btn outline small" style="font-size: 0.8rem;">
+                                        <i class="fa-solid fa-eye"></i> View Details
+                                    </a>
                                 </div>
                             </div>
                         </div>

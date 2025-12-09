@@ -30,6 +30,7 @@ urlpatterns = [
     path('viewitems/', include('viewitems_app.urls')),
     path('requests/', include('request_app.urls')),
     path('calendar/', include('calendar_app.urls')),
+    path('item/', include('item_app.urls')),
 
 ]
 

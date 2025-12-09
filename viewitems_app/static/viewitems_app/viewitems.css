@@ -116,6 +116,17 @@ body.viewitems-body { margin: 0; background: #fafbfc; color: #0f172a; }
   font-weight:700; 
 }
 
+/* Delete button with red background */
+.delete-btn-outline {
+  background: #ef4444 !important;
+  color: white !important;
+  border-color: #ef4444 !important;
+}
+
+.delete-btn-outline:hover {
+  background: #dc2626 !important;
+}
+
 /* responsive */
 @media (max-width:900px) {
   .viewitems-header-content { flex-direction:column; align-items:flex-start; gap:12px; }

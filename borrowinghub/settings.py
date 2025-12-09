@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     'viewitems_app',
     'request_app',
     'calendar_app',
+    'item_app',
 ]
 
 MIDDLEWARE = [

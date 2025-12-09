@@ -1,0 +1,84 @@
+{% extends 'dashboard_app/base.html' %}
+{% load static %}
+{% block title %}{{ item.name }} - BorrowingHub{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'item_app/item.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="item-detail-page">
+    <div class="item-detail-container">
+        <div class="item-detail-content">
+            <!-- Left: Image Section -->
+            <div class="item-detail-image-section">
+                <div class="item-detail-image-wrapper">
+                    {% if item.image_url %}
+                        <a href="{{ item.image_url }}" target="_blank" class="image-link">
+                            <img src="{{ item.image_url }}" alt="{{ item.name }}" class="item-detail-image">
+                        </a>
+                    {% else %}
+                        <div class="item-detail-placeholder">
+                            <i class="fa-solid fa-image"></i>
+                            <p>No Image Available</p>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="item-status-banner {% if item.is_available %}available{% else %}unavailable{% endif %}">
+                    <i class="fa-solid {% if item.is_available %}fa-circle-check{% else %}fa-circle-xmark{% endif %}"></i>
+                    {% if item.is_available %}Available for Borrowing{% else %}Currently Borrowed{% endif %}
+                </div>
+            </div>
+
+            <!-- Right: Details Section -->
+            <div class="item-detail-info-section">
+                <div class="item-detail-header">
+                    <h1 class="item-detail-title">{{ item.name }}</h1>
+                    <span class="item-detail-category">{{ item.category }}</span>
+                </div>
+
+                <div class="item-detail-description">
+                    <h3>Description</h3>
+                    <p>{{ item.description|default:"No description provided." }}</p>
+                </div>
+
+                <!-- Owner Information -->
+                <div class="owner-section">
+                    <h3><i class="fa-solid fa-user"></i> Owner Information</h3>
+                    <div class="owner-details">
+                        <div class="owner-detail-row">
+                            <span class="owner-label">Name:</span>
+                            <span class="owner-value">{{ item.owner.username }}</span>
+                        </div>
+                        <div class="owner-detail-row">
+                            <span class="owner-label">Email:</span>
+                            <span class="owner-value">
+                                <a href="mailto:{{ item.owner.email }}">{{ item.owner.email }}</a>
+                            </span>
+                        </div>
+                        <div class="owner-detail-row">
+                            <span class="owner-label">Phone:</span>
+                            <span class="owner-value">
+                                <span id="phoneNumber">Not provided</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="item-detail-actions">
+                    {% if item.is_available %}
+                        <a href="{% url 'request_app:borrow_request_create' item.id %}" class="btn-primary">
+                            <i class="fa-solid fa-hand-holding"></i> Request to Borrow
+                        </a>
+                    {% else %}
+                        <button class="btn-disabled" disabled>
+                            <i class="fa-solid fa-circle-xmark"></i> Not Available
+                        </button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

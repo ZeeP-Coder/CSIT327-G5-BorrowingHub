@@ -41,7 +41,6 @@
                     <span class="item-category-pill">{{ item.category }}</span>
                 </div>
                 <h4 class="item-title">{{ item.name }}</h4>
-                <p class="item-quantity"><strong>Quantity:</strong> {{ item.quantity }}</p>
                 <p class="item-desc">{{ item.description|default:"No description"|truncatechars:100 }}</p>
                 
                 <div class="item-card-footer">
@@ -54,7 +53,7 @@
                             data-qty="{{ item.quantity }}"
                             data-available="{{ item.is_available }}"
                             onclick="openEditModalFromButton(this)">Edit</button>
-                        <button class="dashboard-btn red small"
+                        <button class="dashboard-btn outline small delete-btn-outline"
                             data-id="{{ item.id }}"
                             data-name="{{ item.name|escapejs }}"
                             onclick="openDeleteModalFromButton(this)">Delete</button>

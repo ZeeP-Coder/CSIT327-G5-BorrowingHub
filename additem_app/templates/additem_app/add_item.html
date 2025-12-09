@@ -73,6 +73,12 @@
         color: #991b1b;
     }
 
+    .message.warning {
+        background-color: #fef3c7;
+        border-color: #f59e0b;
+        color: #92400e;
+    }
+
     .form-group-add {
         margin-bottom: 1.5rem;
     }
@@ -87,6 +93,7 @@
 
     .form-group-add input[type="text"],
     .form-group-add input[type="number"],
+    .form-group-add input[type="tel"],
     .form-group-add input[type="file"],
     .form-group-add textarea {
         width: 100%;
@@ -252,16 +259,6 @@
                 {% csrf_token %}
                 
                 <div class="form-group-add">
-                    <label for="owner_name">Owner Name</label>
-                    <input type="text" id="owner_name" value="{{ user.username }}" readonly style="background-color: #f1f5f9; cursor: not-allowed;">
-                </div>
-
-                <div class="form-group-add">
-                    <label for="owner_email">Owner Email</label>
-                    <input type="text" id="owner_email" value="{{ user.email }}" readonly style="background-color: #f1f5f9; cursor: not-allowed;">
-                </div>
-
-                <div class="form-group-add">
                     <label for="name">Item Name *</label>
                     <input type="text" id="name" name="name" placeholder="Enter item name" required>
                 </div>
@@ -269,6 +266,11 @@
                 <div class="form-group-add">
                     <label for="description">Description</label>
                     <textarea id="description" name="description" placeholder="Describe the item"></textarea>
+                </div>
+
+                <div class="form-group-add">
+                    <label for="contact_phone">Phone Number *</label>
+                    <input type="tel" id="contact_phone" placeholder="Enter your phone number" required>
                 </div>
 
                 <div class="form-group-add">
@@ -306,4 +308,36 @@
         </div>
     </div>
 </div>
+
+<script>
+document.getElementById('addItemForm').addEventListener('submit', function(e) {
+    const imageFile = document.getElementById('image_file');
+    if (!imageFile.files || imageFile.files.length === 0) {
+        e.preventDefault();
+        
+        // Create and show warning message
+        const messagesDiv = document.querySelector('.messages') || createMessagesDiv();
+        const warningMsg = document.createElement('div');
+        warningMsg.className = 'message warning';
+        warningMsg.textContent = 'Please upload an image for the item.';
+        
+        messagesDiv.innerHTML = '';
+        messagesDiv.appendChild(warningMsg);
+        
+        // Scroll to top to show message
+        document.querySelector('.add-item-modal-body').scrollTop = 0;
+        
+        imageFile.focus();
+        return false;
+    }
+});
+
+function createMessagesDiv() {
+    const messagesDiv = document.createElement('div');
+    messagesDiv.className = 'messages';
+    const modalBody = document.querySelector('.add-item-modal-body');
+    modalBody.insertBefore(messagesDiv, modalBody.firstChild);
+    return messagesDiv;
+}
+</script>
 {% endblock %}

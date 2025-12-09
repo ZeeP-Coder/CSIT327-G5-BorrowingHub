@@ -24,7 +24,7 @@ class ItemForm(forms.ModelForm):
     )
 
     image_file = forms.FileField(
-        required=False,
+        required=True,
         label="Upload Image",
         widget=forms.ClearableFileInput
     )

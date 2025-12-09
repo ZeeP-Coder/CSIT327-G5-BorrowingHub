@@ -160,7 +160,7 @@ def borrow_request_create(request, item_id):
 	else:
 		form = BorrowRequestForm()
 
-	return render(request, 'request_app/request_form.html', {'form': form, 'item': item})
+	return render(request, 'request_app/request_form.html', {'form': form, 'item': item, 'user': user})
 
 
 def borrow_request_detail(request, pk):
