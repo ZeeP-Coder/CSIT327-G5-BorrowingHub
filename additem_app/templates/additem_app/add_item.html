@@ -252,6 +252,16 @@
                 {% csrf_token %}
                 
                 <div class="form-group-add">
+                    <label for="owner_name">Owner Name</label>
+                    <input type="text" id="owner_name" value="{{ user.username }}" readonly style="background-color: #f1f5f9; cursor: not-allowed;">
+                </div>
+
+                <div class="form-group-add">
+                    <label for="owner_email">Owner Email</label>
+                    <input type="text" id="owner_email" value="{{ user.email }}" readonly style="background-color: #f1f5f9; cursor: not-allowed;">
+                </div>
+
+                <div class="form-group-add">
                     <label for="name">Item Name *</label>
                     <input type="text" id="name" name="name" placeholder="Enter item name" required>
                 </div>

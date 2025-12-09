@@ -10,6 +10,13 @@ def add_item_view(request):
         messages.error(request, 'Please log in to add an item.')
         return redirect('login_app:login')
 
+    # Get user information
+    try:
+        user = TblUser.objects.get(id=user_id)
+    except TblUser.DoesNotExist:
+        messages.error(request, 'User not found.')
+        return redirect('login_app:login')
+
     if request.method == 'POST':
         form = ItemForm(request.POST, request.FILES)
         if form.is_valid():
@@ -33,4 +40,4 @@ def add_item_view(request):
     else:
         form = ItemForm()
 
-    return render(request, 'additem_app/add_item.html', {'form': form})
+    return render(request, 'additem_app/add_item.html', {'form': form, 'user': user})
