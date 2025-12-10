@@ -23,6 +23,11 @@ def add_item_view(request):
             item = form.save(commit=False)
             item.owner_id = user_id
 
+            # Save phone number to the item
+            contact_phone = request.POST.get('contact_phone')
+            if contact_phone:
+                item.phone_number = contact_phone
+
             categories = form.cleaned_data.get('category', [])
             item.category = ', '.join(categories)
 

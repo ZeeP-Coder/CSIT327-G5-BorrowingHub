@@ -30,4 +30,4 @@ def login_view(request):
 def logout_view(request):
     request.session.flush()
     messages.success(request, 'You have been logged out successfully.')
-    return redirect('landing_app:landing')
+    return redirect('login_app:login')

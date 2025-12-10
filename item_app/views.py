@@ -18,9 +18,13 @@ def item_detail(request, item_id):
     
     item = get_object_or_404(Item, id=item_id)
     
+    # Get phone number from the item
+    temp_phone = item.phone_number if item.phone_number else 'Not provided'
+    
     context = {
         'item': item,
         'user': user,
+        'temp_phone': temp_phone,
     }
     
     return render(request, 'item_app/item.html', context)

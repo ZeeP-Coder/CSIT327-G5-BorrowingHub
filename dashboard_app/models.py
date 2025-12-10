@@ -11,6 +11,7 @@ class Item(models.Model):
     quantity = models.PositiveIntegerField(default=1)
     is_available = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    phone_number = models.CharField(max_length=20, blank=True, null=True)
 
     def __str__(self):
         return self.name
