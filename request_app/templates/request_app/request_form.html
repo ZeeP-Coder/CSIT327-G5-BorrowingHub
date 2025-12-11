@@ -287,7 +287,7 @@
   <div class="form-card">
     <h3>Set Your Return Date</h3>
     
-    <form method="post">
+    <form method="post" id="borrowRequestForm">
       {% csrf_token %}
       
       <div class="form-group">
@@ -308,6 +308,30 @@
         <button type="submit" class="btn btn-primary">Send Request</button>
       </div>
     </form>
+    
+    <script>
+      // Set minimum date to today
+      document.addEventListener('DOMContentLoaded', function() {
+        const dateInput = document.querySelector('input[type="date"]');
+        if (dateInput) {
+          const today = new Date().toISOString().split('T')[0];
+          dateInput.setAttribute('min', today);
+          
+          // Add validation feedback
+          dateInput.addEventListener('change', function() {
+            const selectedDate = new Date(this.value);
+            const todayDate = new Date(today);
+            
+            if (selectedDate < todayDate) {
+              this.setCustomValidity('Return date cannot be in the past');
+              this.reportValidity();
+            } else {
+              this.setCustomValidity('');
+            }
+          });
+        }
+      });
+    </script>
   </div>
 </div>
 {% endblock %}

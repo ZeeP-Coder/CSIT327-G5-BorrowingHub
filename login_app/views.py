@@ -28,6 +28,10 @@ def login_view(request):
     return render(request, 'login_app/login.html')
 
 def logout_view(request):
+    # Clear any existing messages before logout
+    storage = messages.get_messages(request)
+    storage.used = True
+    
     request.session.flush()
     messages.success(request, 'You have been logged out successfully.')
     return redirect('login_app:login')

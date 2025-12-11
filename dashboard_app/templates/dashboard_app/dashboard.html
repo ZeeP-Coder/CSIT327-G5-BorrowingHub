@@ -82,6 +82,51 @@
                 
 {# Requests modal will show pending requests; do not display inline on dashboard #}
 
+<!-- Rejection Modal -->
+<div id="rejectionModal" class="modal rejection-modal" aria-hidden="true" style="display:none;">
+    <div class="modal-overlay" id="rejectionModalOverlay"></div>
+    <div class="rejection-modal-inner">
+        <header class="modal-header">
+            <div class="modal-header-content">
+                <i class="fa-solid fa-triangle-exclamation" style="color: #e63946;"></i>
+                <h3>Reject Borrow Request</h3>
+            </div>
+            <button id="closeRejectionModal" class="modal-close">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </header>
+        <div class="modal-body">
+            <div class="rejection-info">
+                <p class="rejection-item-name">Item: <strong id="rejectionItemName"></strong></p>
+                <p class="rejection-borrower">Requested by: <strong id="rejectionBorrowerName"></strong></p>
+            </div>
+            <form id="rejectionForm">
+                <div class="form-group">
+                    <label for="rejectionReason">Reason for Rejection <span class="optional-label">(optional)</span></label>
+                    <textarea 
+                        id="rejectionReason" 
+                        name="reason" 
+                        rows="4" 
+                        placeholder="Please provide a reason for rejecting this request..." 
+                        class="rejection-textarea"
+                    ></textarea>
+                    <p class="helper-text">This reason will be visible to the borrower.</p>
+                </div>
+                <div class="rejection-actions">
+                    <button type="button" id="cancelRejection" class="btn btn-cancel">
+                        <i class="fa-solid fa-xmark"></i>
+                        Cancel
+                    </button>
+                    <button type="submit" id="confirmRejection" class="btn btn-reject">
+                        <i class="fa-solid fa-ban"></i>
+                        Reject Request
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <!-- Requests Modal -->
 <div id="requestsModal" class="modal requests-modal" aria-hidden="true" style="display:none;">
     <div class="modal-inner">
@@ -129,7 +174,11 @@
                                     <i class="fa-solid fa-check"></i>
                                     Approve
                                 </button>
-                                <button class="request-action-btn reject reject-request" data-request-id="{{ br.id }}" data-url="{% url 'request_app:reject_borrow_request_ajax' br.id %}">
+                                <button class="request-action-btn reject reject-request" 
+                                    data-request-id="{{ br.id }}" 
+                                    data-url="{% url 'request_app:reject_borrow_request_ajax' br.id %}"
+                                    data-item-name="{{ br.item.name }}"
+                                    data-borrower-name="{{ br.borrower.username }}">
                                     <i class="fa-solid fa-xmark"></i>
                                     Reject
                                 </button>

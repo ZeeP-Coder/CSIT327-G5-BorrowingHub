@@ -103,17 +103,31 @@ def reject_borrow_request_ajax(request, request_id):
 	if item.owner_id != user.id:
 		return JsonResponse({'success': False, 'error': 'not owner'}, status=403)
 
+	# Get rejection reason from request body
+	import json
+	reason = ''
+	try:
+		body = json.loads(request.body.decode('utf-8'))
+		reason = body.get('reason', '').strip()
+	except:
+		pass
+
 	borrow_request.status = 'Rejected'
 	borrow_request.save()
 
-	# Record history entry
+	# Record history entry with reason
 	try:
 		from .models import RequestRecord
-		RequestRecord.objects.create(borrow_request=borrow_request, action='Rejected', performed_by=user)
+		RequestRecord.objects.create(
+			borrow_request=borrow_request, 
+			action='Rejected', 
+			performed_by=user,
+			note=reason if reason else 'No reason provided'
+		)
 	except Exception:
 		pass
 
-	return JsonResponse({'success': True, 'message': 'Rejected'})
+	return JsonResponse({'success': True, 'message': 'Request rejected successfully'})
 
 
 def borrow_request_list(request):
@@ -154,7 +168,7 @@ def borrow_request_create(request, item_id):
 			br.status = 'Pending'
 			br.save()
 			messages.success(request, f'Borrow request for "{item.name}" submitted successfully!')
-			return redirect('request_app:borrow_request_list')
+			return redirect('dashboard_app:dashboard')
 		else:
 			messages.error(request, f"Invalid due date: {form.errors}")
 	else:
