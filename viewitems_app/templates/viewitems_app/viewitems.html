@@ -75,26 +75,31 @@
     {% endif %}
 </div>
 
-<!-- EDIT MODAL -->
 <div id="editModal" class="modal">
     <div class="modal-content-new">
+        <!-- HEADER -->
         <div class="modal-header-new">
             <h3>Edit Item</h3>
             <button type="button" class="close-btn" onclick="closeModal('editModal')">&times;</button>
         </div>
+
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <input type="hidden" name="action" value="edit">
             <input type="hidden" id="edit_item_id" name="item_id">
+
+            <!-- BODY -->
             <div class="modal-body-new">
                 <div class="form-group-new">
                     <label for="edit_name">Item Name *</label>
                     <input type="text" id="edit_name" name="name" required>
                 </div>
+
                 <div class="form-group-new">
                     <label for="edit_description">Description</label>
                     <textarea id="edit_description" name="description" rows="3"></textarea>
                 </div>
+
                 <div class="form-group-new">
                     <label>Category *</label>
                     <div class="category-grid-new">
@@ -106,19 +111,24 @@
                         {% endfor %}
                     </div>
                 </div>
+
                 <div class="form-group-new">
                     <label for="edit_quantity">Quantity Available *</label>
                     <input type="number" id="edit_quantity" name="quantity" min="1">
                 </div>
+
                 <div class="form-group-new">
                     <label for="edit_image_file">Update Image (optional)</label>
                     <input type="file" id="edit_image_file" name="image_file" accept="image/*">
                 </div>
+
                 <div class="availability-toggle-new">
                     <input type="checkbox" id="edit_available" name="is_available">
                     <label for="edit_available">Available for borrowing</label>
                 </div>
             </div>
+
+            <!-- FOOTER -->
             <div class="modal-footer-new">
                 <button type="button" class="btn-modal cancel" onclick="closeModal('editModal')">Cancel</button>
                 <button type="submit" class="btn-modal confirm">Save Changes</button>
@@ -126,6 +136,8 @@
         </form>
     </div>
 </div>
+
+
 
 <style>
     /* New Modal Styles */

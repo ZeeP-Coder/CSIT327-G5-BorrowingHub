@@ -149,12 +149,22 @@ body.viewitems-body { margin: 0; background: #fafbfc; color: #0f172a; }
     justify-content: center;
 }
 
+.modal-body-new {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    padding: 2rem;
+    min-height: 0; /* necessary for flex scroll */
+    max-height: calc(90vh - 210px); /* subtract header + footer height */
+}
+
+
 .modal-content-new {
     background: white;
     border-radius: 12px;
     width: 95%;
     max-width: 1000px;
-    max-height: 90vh; /* limits modal height */
+    max-height: 90vh;
+    overflow-y: auto;
     display: flex;
     flex-direction: column;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
@@ -199,10 +209,10 @@ body.viewitems-body { margin: 0; background: #fafbfc; color: #0f172a; }
 
 /* Scrollable modal body */
 .modal-body-new {
-    padding: 2rem;
-    overflow-y: auto;
     flex: 1 1 auto;
-    min-height: 0; /* fixes flexbox scrolling bug */
+    overflow-y: auto;
+    padding: 2rem;
+    min-height: 0;
 }
 
 .form-group-new {
@@ -285,7 +295,7 @@ body.viewitems-body { margin: 0; background: #fafbfc; color: #0f172a; }
 .availability-toggle-new {
     display: flex;
     align-items: center;
-    padding: 1rem;
+    padding: 0.75rem;
     background: #f8fafc;
     border-radius: 8px;
     border: 1px solid #e2e8f0;
@@ -307,11 +317,12 @@ body.viewitems-body { margin: 0; background: #fafbfc; color: #0f172a; }
 }
 
 .modal-footer-new {
-    padding: 1.5rem;
-    border-top: 1px solid #e2e8f0;
     display: flex;
     gap: 1rem;
+    padding: 1.5rem;
+    border-top: 1px solid #e2e8f0;
     background: #f8fafc;
+    flex-shrink: 0; /* ensures footer doesn't shrink */
 }
 
 .btn-modal {
@@ -346,3 +357,4 @@ body.viewitems-body { margin: 0; background: #fafbfc; color: #0f172a; }
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
 }
+
